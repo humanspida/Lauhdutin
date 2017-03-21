@@ -33,6 +33,7 @@ function Initialize()
 		BANNER_URL = "bannerurl",
 		ERROR = "error",
 		HIDDEN = "hidden",
+		HOURS_LAST_PLAY = "hourslastplay",   
 		HOURS_LAST_TWO_WEEKS = "hourslast2weeks",
 		HOURS_TOTAL = "hourstotal",
 		INVALID_PATH = "invalidpatherror",
@@ -817,6 +818,7 @@ end
 	function UpdateTimePlayed()
 		if T_RECENTLY_LAUNCHED_GAME ~= nil then
 			local hoursPlayed = os.difftime(os.time(), T_RECENTLY_LAUNCHED_GAME[GAME_KEYS.LASTPLAYED]) / 3600
+			T_RECENTLY_LAUNCHED_GAME[GAME_KEYS.HOURS_LAST_PLAY] = hoursPlayed
 			T_RECENTLY_LAUNCHED_GAME[GAME_KEYS.HOURS_TOTAL] = hoursPlayed + T_RECENTLY_LAUNCHED_GAME[GAME_KEYS.HOURS_TOTAL]
 			WriteGames()
 			PopulateSlots()
