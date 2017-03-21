@@ -166,9 +166,6 @@ try:
                                 not game_new.get(GameKeys.HOURS_TOTAL, None)):
                             game_new[GameKeys.HOURS_TOTAL] = game_old[
                                 GameKeys.HOURS_TOTAL]
-                        if game_old.get(GameKeys.HOURS_LAST_PLAY, None) :
-                            game_new[GameKeys.HOURS_LAST_PLAY] = game_old[
-                                GameKeys.HOURS_LAST_PLAY]
                         del all_games_old[i]
                         break
                     i += 1
