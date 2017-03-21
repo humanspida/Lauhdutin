@@ -6,6 +6,7 @@ class GameKeys():
     BANNER_URL = "bannerurl"
     ERROR = "error"
     HIDDEN = "hidden"
+    HOURS_LAST_PLAY = "hourslastplay"   
     HOURS_LAST_TWO_WEEKS = "hourslast2weeks"
     HOURS_TOTAL = "hourstotal"
     INVALID_PATH = "invalidpatherror"
