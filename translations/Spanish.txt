@@ -17,13 +17,13 @@ button_label_yes	Sí
 filter_back_button_title	Atrás
 filter_clear_filters	Clear filters
 filter_from_platform	Is on platform
-filter_has_no_tags	Has no tags
-filter_has_notes	Has notes
-filter_has_tag	Has tag
-filter_is_hidden	Is hidden
-filter_is_uninstalled	Is not installed
+filter_has_no_tags	Sin etiquetas
+filter_has_notes	Con notas
+filter_has_tag	Con etiquetas
+filter_is_hidden	Oculto
+filter_is_uninstalled	Desinstalado
 filter_never_played	Has never been played
-filter_random	Random game
+filter_random	Juego aleatorio
 filter_window_all_title	Filter
 filter_window_current_title	Filter (current games)
 game_ignores_other_bangs	Ignores other bangs
@@ -37,7 +37,7 @@ game_path	Path
 game_platform	Plataforma
 game_process	Proceso
 game_tag_create	Create a new tag
-game_tags	Categorías
+game_tags	Etiquetas
 game_visible	Visible
 main_context_title_execute_stopping_bangs	Execute stopping bangs
 main_context_title_open_shortcuts_folder	Open shortcuts folder
