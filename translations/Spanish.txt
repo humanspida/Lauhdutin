@@ -95,7 +95,7 @@ setting_localization_language_title	Idioma
 setting_logging_description	If enabled, then a bunch of messages are printed to the Rainmeter log. Useful when troubleshooting issues.
 setting_logging_title	Registro
 setting_number_of_backups_description	The number of daily backups to keep of the list of games.
-setting_number_of_backups_title	Número de copias de seguridad
+setting_number_of_backups_title	Numero de copias de seguridad
 setting_shortcuts_enabled_description	If enabled, then Windows shortcuts placed in the designated folder will be included.
 setting_shortcuts_open_folder_description	Shortcuts and their banners should be placed in this folder. The banners should be named after their corresponding shortcut.
 setting_shortcuts_open_folder_title	Carpeta
