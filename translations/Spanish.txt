@@ -72,10 +72,10 @@ setting_animation_label_slide_left	Deslizar a la izquierda
 setting_animation_label_slide_right	Deslizar a la derecha
 setting_animation_label_slide_up	Deslizar hacia arriba
 setting_animation_label_zoom_in	Acercar
-setting_bangs_enabled_description	If enabled, then the specified Rainmeter bangs are executed when a game starts or terminates.
-setting_bangs_enabled_title	Execute bangs
-setting_bangs_starting_description	These Rainmeter bangs are executed just before any game launches.
-setting_bangs_stopping_description	These Rainmeter bangs are executed just after any game terminates.
+setting_bangs_enabled_description	Si está activada, los bangs de Rainmeter especificados son ejecutados cuando empieza o finaliza la ejecución de un juego.
+setting_bangs_enabled_title	Ejecutar bangs
+setting_bangs_starting_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego.
+setting_bangs_stopping_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego.
 setting_battlenet_add_path	Añadir ruta...
 setting_battlenet_enabled_description	If enabled, then games installed via the Blizzard Battle.net client will be included.
 setting_battlenet_paths_description	""Define the absolute paths to folders, which contain Blizzard Battle.net games in their own subfolders:\nIf e.g. Hearthstone is installed in "D:\\Blizzard games\\Hearthstone", then the path that you give should be "D:\\Blizzard games".\nEdit a path and input an empty string to remove that path.""
@@ -116,11 +116,11 @@ setting_slots_center_on_monitor_title	Center windows on the current monitor
 setting_slots_click_animation_description	The animation that plays when a slot is clicked.
 setting_slots_click_animation_title	Slot click animation
 setting_slots_columns_description	The number of columns of slots.
-setting_slots_columns_title	Number of columns
+setting_slots_columns_title	Número de columnas
 setting_slots_double_click_to_launch_description	If enabled, then a game has to be double-clicked to launched.
 setting_slots_double_click_to_launch_title	Double-click to launch.
 setting_slots_height_description	The height of each slot in pixels.
-setting_slots_height_title	Slot height
+setting_slots_height_title	Altura de la ranura
 setting_slots_horizontal_orientation_description	If enabled, then slots are placed from left to right. If disabled, then slots are placed from the top to the bottom.
 setting_slots_horizontal_orientation_title	Horizontal orientation
 setting_slots_hover_animation_description	The animation that plays when the mouse is on a slot.
@@ -128,11 +128,11 @@ setting_slots_hover_animation_title	Slot hover animation
 setting_slots_overlay_enabled_description	If enabled, then an overlay with contextual information is displayed when the mouse is on a slot.
 setting_slots_overlay_enabled_title	Show overlay on slots
 setting_slots_rows_description	The number of rows of slots.
-setting_slots_rows_title	Number of rows
+setting_slots_rows_title	Número de filas
 setting_slots_toolbar_at_top_description	If enabled, then the toolbar is at the top of the skin.
 setting_slots_toolbar_at_top_title	Toolbar at the top
 setting_slots_width_description	The width of each slot in pixels.
-setting_slots_width_title	Slot width
+setting_slots_width_title	Anchura de la ranura
 setting_steam_account_description	Choose the Steam account whose games to get.
 setting_steam_account_title	Cuenta
 setting_steam_client_path_description	This should be the folder that contains the Steam client executable.
