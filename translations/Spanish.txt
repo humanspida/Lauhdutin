@@ -50,7 +50,7 @@ main_context_title_stop_removing_games	Stop removing games
 main_context_title_stop_unhiding_games	Stop unhiding games
 main_no_games	No hay juegos que mostrar
 main_status_detecting_games	Detectando juegos
-main_status_detecting_platform_games	Detectando %s juegos
+main_status_detecting_platform_games	Detectando juegos de %s 
 main_status_n_banners_to_download	%d imágenes pendientes de descargar
 overlay_already_hidden	Already hidden
 overlay_already_visible	Already visible
