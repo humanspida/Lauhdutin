@@ -95,7 +95,7 @@ setting_localization_language_title	Idioma
 setting_logging_description	Si está activada se imprimirán un montón de mensajes en el registro del Rainmeter. Útil para solucionar problemas.
 setting_logging_title	Registro
 setting_number_of_backups_description	The number of daily backups to keep of the list of games.
-setting_number_of_backups_title	Número de copias de seguridad
+setting_number_of_backups_title	Cantidad de copias de seguridad
 setting_shortcuts_enabled_description	If enabled, then Windows shortcuts placed in the designated folder will be included.
 setting_shortcuts_open_folder_description	Shortcuts and their banners should be placed in this folder. The banners should be named after their corresponding shortcut.
 setting_shortcuts_open_folder_title	Carpeta
@@ -115,8 +115,8 @@ setting_slots_center_on_monitor_description	If enabled, then some windows (e.g. 
 setting_slots_center_on_monitor_title	Center windows on the current monitor
 setting_slots_click_animation_description	The animation that plays when a slot is clicked.
 setting_slots_click_animation_title	Slot click animation
-setting_slots_columns_description	El número de columnas de ranuras.
-setting_slots_columns_title	Número de columnas
+setting_slots_columns_description	La cantidad de columnas de ranuras.
+setting_slots_columns_title Cantidad de columnas
 setting_slots_double_click_to_launch_description	Si está activada, hay que hacer doble clic para ejecutar un juego.
 setting_slots_double_click_to_launch_title	Doble clic para ejecutar.
 setting_slots_height_description	The height of each slot in pixels.
@@ -127,8 +127,8 @@ setting_slots_hover_animation_description	The animation that plays when the mous
 setting_slots_hover_animation_title	Slot hover animation
 setting_slots_overlay_enabled_description	If enabled, then an overlay with contextual information is displayed when the mouse is on a slot.
 setting_slots_overlay_enabled_title	Superposición en ranuras
-setting_slots_rows_description	The number of rows of slots.
-setting_slots_rows_title	Número de filas
+setting_slots_rows_description	La cantidad de filas de ranuras.
+setting_slots_rows_title	Cantidad de filas
 setting_slots_toolbar_at_top_description	If enabled, then the toolbar is at the top of the skin.
 setting_slots_toolbar_at_top_title	Toolbar at the top
 setting_slots_width_description	The width of each slot in pixels.
