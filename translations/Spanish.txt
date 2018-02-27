@@ -116,7 +116,7 @@ setting_slots_center_on_monitor_title	Center windows on the current monitor
 setting_slots_click_animation_description	The animation that plays when a slot is clicked.
 setting_slots_click_animation_title	Slot click animation
 setting_slots_columns_description	La cantidad de columnas de ranuras.
-setting_slots_columns_title Cantidad de columnas
+setting_slots_columns_title	Cantidad de columnas
 setting_slots_double_click_to_launch_description	Si está activada, hay que hacer doble clic para ejecutar un juego.
 setting_slots_double_click_to_launch_title	Doble clic para ejecutar.
 setting_slots_height_description	The height of each slot in pixels.
