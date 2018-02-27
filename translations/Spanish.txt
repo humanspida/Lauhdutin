@@ -40,7 +40,7 @@ game_tag_create	Crear nueva etiqueta
 game_tags	Etiquetas
 game_visible	Visible
 main_context_title_execute_stopping_bangs	Ejecutar bangs de finalización
-main_context_title_open_shortcuts_folder	Abrir carpeta de accesos directos
+main_context_title_open_shortcuts_folder	Ver carpeta de accesos directos
 main_context_title_settings	Ajustes
 main_context_title_start_hiding_games	Iniciar ocultar juegos
 main_context_title_start_removing_games	Iniciar eliminar juegos
@@ -77,19 +77,19 @@ setting_bangs_enabled_title	Ejecutar bangs
 setting_bangs_starting_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego.
 setting_bangs_stopping_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego.
 setting_battlenet_add_path	Añadir ruta...
-setting_battlenet_enabled_description	If enabled, then games installed via the Blizzard Battle.net client will be included.
+setting_battlenet_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de Blizzard Battle.net.
 setting_battlenet_paths_description	""Define the absolute paths to folders, which contain Blizzard Battle.net games in their own subfolders:\nIf e.g. Hearthstone is installed in "D:\\Blizzard games\\Hearthstone", then the path that you give should be "D:\\Blizzard games".\nEdit a path and input an empty string to remove that path.""
 setting_battlenet_paths_title	Rutas
-setting_battlenet_starting_bangs_description	These Rainmeter bangs are executed just before any Blizzard Battle.net game launches.
-setting_battlenet_stopping_bangs_description	These Rainmeter bangs are executed just after any Blizzard Battle.net game terminates.Paths	TRANSLATION_MISSING
-setting_gog_galaxy_client_path_description	The folder that contains the GOG Galaxy client executable.
-setting_gog_galaxy_enabled_description	If enabled, then games installed via the GOG Galaxy client will be included.
+setting_battlenet_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Blizzard Battle.net.
+setting_battlenet_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Blizzard Battle.net.
+setting_gog_galaxy_client_path_description	La carpeta que contiene el ejecutable del cliente de GOG Galaxy.
+setting_gog_galaxy_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de GOG Galaxy.
 setting_gog_galaxy_indirect_launch_description	If enabled, then games will be launched via the GOG Galaxy client.\nLaunching via the client allows the client's overlay to be used and for the client to track the amount of time played.
 setting_gog_galaxy_indirect_launch_title	Iniciar a través del cliente
-setting_gog_galaxy_program_data_path_description	The path where the GOG Galaxy client stores some of its data.
+setting_gog_galaxy_program_data_path_description	La ruta en la que el cliente de GOG Galaxy guarda algunos de sus datos.
 setting_gog_galaxy_program_data_path_title	Ruta de ProgramData
-setting_gog_galaxy_starting_bangs_description	These Rainmeter bangs are executed just before any GOG Galaxy game launches.
-setting_gog_galaxy_stopping_bangs_description	These Rainmeter bangs are executed just after any GOG Galaxy game terminates.
+setting_gog_galaxy_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de GOG Galaxy.
+setting_gog_galaxy_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de GOG Galaxy.
 setting_localization_language_description	Selecciona un idioma.
 setting_localization_language_title	Idioma
 setting_logging_description	If enabled, then a bunch of messages are printed to the Rainmeter log. Useful when troubleshooting issues.
