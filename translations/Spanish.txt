@@ -60,6 +60,7 @@ overlay_install	Instalar
 overlay_platform_not_running	%s no se está ejecutando
 overlay_remove	Eliminar
 overlay_unhide	Mostrar
+overlay_uninstalled	Desinstalado
 platform_name_windows_shortcut	Acceso directo de Windows
 search_window_all_title	Buscar
 search_window_current_title	Buscar (juegos actuales)
@@ -101,11 +102,11 @@ setting_shortcuts_open_folder_description	Shortcuts and their banners should be 
 setting_shortcuts_open_folder_title	Carpeta
 setting_shortcuts_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de acceso directo de Windows.
 setting_shortcuts_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de acceso directo de Windows.
-setting_shortcuts_title	Windows shortcuts
+setting_shortcuts_title	Accesos directos de Windows
 setting_skin_animation_description	The animation that is played when the mouse leaves the skin. The animation is played in reverse when the mouse enters the skin\'s enabler edge.
 setting_skin_animation_title	Skin animation
 setting_skin_hide_skin_description	If enabled, then the skin is hidden while playing a game.
-setting_skin_hide_skin_title	Hide skin while playing
+setting_skin_hide_skin_title	Ocultar piel mientras se juega
 setting_skin_revealing_delay_description	The duration (in milliseconds) before the skin animation is played in order to reveal the skin.
 setting_skin_revealing_delay_title	Revealing delay
 setting_skin_scroll_step_description	The number of games that are scrolled at each scroll event.
@@ -119,7 +120,7 @@ setting_slots_columns_description	La cantidad de columnas de ranuras.
 setting_slots_columns_title	Cantidad de columnas
 setting_slots_double_click_to_launch_description	Si está activada, hay que hacer doble clic para ejecutar un juego.
 setting_slots_double_click_to_launch_title	Doble clic para ejecutar.
-setting_slots_height_description	The height of each slot in pixels.
+setting_slots_height_description	La altura de cada ranura en píxeles.
 setting_slots_height_title	Altura de la ranura
 setting_slots_horizontal_orientation_description	If enabled, then slots are placed from left to right. If disabled, then slots are placed from the top to the bottom.
 setting_slots_horizontal_orientation_title	Orientación horizontal
@@ -131,14 +132,14 @@ setting_slots_rows_description	La cantidad de filas de ranuras.
 setting_slots_rows_title	Cantidad de filas
 setting_slots_toolbar_at_top_description	If enabled, then the toolbar is at the top of the skin.
 setting_slots_toolbar_at_top_title	Toolbar at the top
-setting_slots_width_description	The width of each slot in pixels.
+setting_slots_width_description	La anchura de cada ranura en píxeles.
 setting_slots_width_title	Anchura de la ranura
 setting_steam_account_description	Choose the Steam account whose games to get.
 setting_steam_account_title	Cuenta
-setting_steam_client_path_description	This should be the folder that contains the Steam client executable.
+setting_steam_client_path_description	La carpeta que contiene el ejecutable del cliente de Steam.
 setting_steam_community_profile_description	If enabled, then the Steam community profile will be downloaded and parsed to get:\n- All games associated with the chosen account even if not installed at the moment.\n- The total hours played of each game associated with the chosen account.\n\nRequires the Steam community profile to be public.
-setting_steam_community_profile_title	Parse community profile
-setting_steam_enabled_description	If enabled, then games installed via the Steam client will be included. Non-Steam game shortcuts that have been added to Steam will also be included.
+setting_steam_community_profile_title	Análisis del perfil de la comunidad
+setting_steam_enabled_description	Si está activada serán añadidos los juegos instalados con el cliente de Steam, incluyendo los juegos que no son de Steam que hayan sido añadidos manualmente a la biblioteca.
 setting_steam_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Steam.
 setting_steam_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Steam.
 sort_alphabetically	Alfabéticamente
