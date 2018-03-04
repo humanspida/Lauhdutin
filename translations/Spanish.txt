@@ -73,19 +73,19 @@ setting_animation_label_slide_left	Deslizar a la izquierda
 setting_animation_label_slide_right	Deslizar a la derecha
 setting_animation_label_slide_up	Deslizar hacia arriba
 setting_animation_label_zoom_in	Acercar
-setting_bangs_enabled_description	Si está activada los bangs de Rainmeter especificados son ejecutados cuando empieza o finaliza la ejecución de un juego.
+setting_bangs_enabled_description	Si está activada, los bangs de Rainmeter especificados son ejecutados cuando empieza o finaliza la ejecución de un juego.
 setting_bangs_enabled_title	Ejecutar bangs
 setting_bangs_starting_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego.
 setting_bangs_stopping_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego.
 setting_battlenet_add_path	Añadir ruta...
-setting_battlenet_enabled_description	Si está activada serán añadidos los juegos instalados con el cliente de Blizzard Battle.net.
-setting_battlenet_paths_description	""Define the absolute paths to folders, which contain Blizzard Battle.net games in their own subfolders:\nIf e.g. Hearthstone is installed in "D:\\Blizzard games\\Hearthstone", then the path that you give should be "D:\\Blizzard games".\nEdit a path and input an empty string to remove that path.""
+setting_battlenet_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de Blizzard Battle.net.
+setting_battlenet_paths_description	""Definir la ruta de la carpeta que contiene los juegos de Blizzard Battle.net en sus respectivas subcarpetas:\nSi p. ej. Hearthstone está instalado en "D:\\Juegos\\Blizzard\\Hearthstone", la ruta que habría que poner sería "D:\\Juegos\\Blizzard".\nPara eliminar una ruta, editarla e introducir una cadena vacía.""
 setting_battlenet_paths_title	Rutas
 setting_battlenet_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Blizzard Battle.net.
 setting_battlenet_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Blizzard Battle.net.
 setting_gog_galaxy_client_path_description	La carpeta que contiene el ejecutable del cliente de GOG Galaxy.
-setting_gog_galaxy_enabled_description	Si está activada serán añadidos los juegos instalados con el cliente de GOG Galaxy.
-setting_gog_galaxy_indirect_launch_description	Si está activada los juegos serán ejecutados mediante el cliente de GOG Galaxy.\nEjecutándolos mediante el cliente permite usar su superposición y que el cliente registre las horas de juego.
+setting_gog_galaxy_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de GOG Galaxy.
+setting_gog_galaxy_indirect_launch_description	Si está activada, los juegos serán ejecutados mediante el cliente de GOG Galaxy.\nEjecutándolos mediante el cliente permite usar su superposición y que el cliente registre las horas de juego.
 setting_gog_galaxy_indirect_launch_title	Iniciar a través del cliente
 setting_gog_galaxy_program_data_path_description	La ruta en la que el cliente de GOG Galaxy guarda algunos de sus datos.
 setting_gog_galaxy_program_data_path_title	Ruta de ProgramData
@@ -93,26 +93,26 @@ setting_gog_galaxy_starting_bangs_description	Estos bangs de Rainmeter son ejecu
 setting_gog_galaxy_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de GOG Galaxy.
 setting_localization_language_description	Selecciona un idioma.
 setting_localization_language_title	Idioma
-setting_logging_description	Si está activada se imprimirán un montón de mensajes en el registro del Rainmeter. Útil para solucionar problemas.
+setting_logging_description	Si está activada, se imprimirán un montón de mensajes en el registro del Rainmeter. Útil para solucionar problemas.
 setting_logging_title	Registro
 setting_number_of_backups_description	El número de copias de seguridad diarias de la lista de juegos que serán guardadas.
 setting_number_of_backups_title	Cantidad de copias de seguridad
-setting_shortcuts_enabled_description	If enabled, then Windows shortcuts placed in the designated folder will be included.
-setting_shortcuts_open_folder_description	Shortcuts and their banners should be placed in this folder. The banners should be named after their corresponding shortcut.
+setting_shortcuts_enabled_description	Si está activada, serán añadidos los accesos directos de Windows situados en la carpeta designada.
+setting_shortcuts_open_folder_description	Accesos directos y sus imágenes deben ser situados en esta carpeta. Las imágenes deben llevar el nombre de su respectivo acceso directo.
 setting_shortcuts_open_folder_title	Carpeta
 setting_shortcuts_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de acceso directo de Windows.
 setting_shortcuts_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de acceso directo de Windows.
 setting_shortcuts_title	Accesos directos de Windows
-setting_skin_animation_description	The animation that is played when the mouse leaves the skin. The animation is played in reverse when the mouse enters the skin\'s enabler edge.
+setting_skin_animation_description	La animación que es reproducida cuando el ratón abandona la piel. La animación se reproduce al revés cuando el ratón entra en el borde facilitador de la piel.
 setting_skin_animation_title	Animación de la piel
-setting_skin_hide_skin_description	Si está activada la piel será ocultada mientras se ejecuta un juego.
+setting_skin_hide_skin_description	Si está activada, la piel será ocultada mientras se ejecuta un juego.
 setting_skin_hide_skin_title	Ocultar piel mientras se juega
 setting_skin_revealing_delay_description	La duración del retardo (en milisegundos) antes de que se reproduzca la animación de la piel para revelarla.
 setting_skin_revealing_delay_title	Retardo de revelado
 setting_skin_scroll_step_description	El número de filas / columnas de juegos que se desplazan en cada evento de desplazamiento.
 setting_skin_scroll_step_title	Nivel de desplazamiento
 setting_skin_title	Piel
-setting_slots_center_on_monitor_description	Si está activada algunas ventanas (p. ej. ordenar, filtrar) serán centradas en el monitor en el que la ventana de la piel principal esté activada.
+setting_slots_center_on_monitor_description	Si está activada, algunas ventanas (p. ej. ordenar, filtrar) serán centradas en el monitor en el que la ventana de la piel principal esté activada.
 setting_slots_center_on_monitor_title	Centrar ventanas en el monitor actual
 setting_slots_click_animation_description	La animación que es reproducida cuando una ranura es clicada.
 setting_slots_click_animation_title	Animación de clic de ranura
@@ -122,24 +122,24 @@ setting_slots_double_click_to_launch_description	Si está activada, hay que hace
 setting_slots_double_click_to_launch_title	Doble clic para ejecutar.
 setting_slots_height_description	La altura de cada ranura en píxeles.
 setting_slots_height_title	Altura de la ranura
-setting_slots_horizontal_orientation_description	If enabled, then slots are placed from left to right. If disabled, then slots are placed from the top to the bottom.
+setting_slots_horizontal_orientation_description	Si está activada, las ranuras se colocan de izquierda a derecha. Si está desactivada, de arriba a abajo.
 setting_slots_horizontal_orientation_title	Orientación horizontal
 setting_slots_hover_animation_description	La animación que es reproducida al pasar el puntero sobre una ranura.
 setting_slots_hover_animation_title	Animación de ranura al pasar puntero
-setting_slots_overlay_enabled_description	If enabled, then an overlay with contextual information is displayed when the mouse is on a slot.
+setting_slots_overlay_enabled_description	Si está activada, se muestra una superposición con información contextual cuando el ratón está en una ranura.
 setting_slots_overlay_enabled_title	Superposición en ranuras
 setting_slots_rows_description	La cantidad de filas de ranuras.
 setting_slots_rows_title	Cantidad de filas
-setting_slots_toolbar_at_top_description	If enabled, then the toolbar is at the top of the skin.
-setting_slots_toolbar_at_top_title	Toolbar at the top
+setting_slots_toolbar_at_top_description	Si está activada, la barra de herramientas está en la parte superior de la piel.
+setting_slots_toolbar_at_top_title	Barra de herramientas en la parte superior
 setting_slots_width_description	La anchura de cada ranura en píxeles.
 setting_slots_width_title	Anchura de la ranura
 setting_steam_account_description	Elija la cuenta de Steam de la que obtener juegos.
 setting_steam_account_title	Cuenta
 setting_steam_client_path_description	La carpeta que contiene el ejecutable del cliente de Steam.
-setting_steam_community_profile_description	If enabled, then the Steam community profile will be downloaded and parsed to get:\n- All games associated with the chosen account even if not installed at the moment.\n- The total hours played of each game associated with the chosen account.\n\nRequires the Steam community profile to be public.
+setting_steam_community_profile_description	Si está activada, el perfil de la comunidad será descargado y analizado para obtener:\n- Todos los juegos de la cuenta elegida aunque no estén instalados en este momento.\n- El total de horas jugadas de cada juego de la cuenta elegida.\n\nRequiere que el perfil de la comunidad de Steam sea público.
 setting_steam_community_profile_title	Análisis del perfil de la comunidad
-setting_steam_enabled_description	Si está activada serán añadidos los juegos instalados con el cliente de Steam, incluyendo los juegos que no son de Steam que hayan sido añadidos manualmente a la biblioteca.
+setting_steam_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de Steam, incluyendo los juegos que no son de Steam que hayan sido añadidos manualmente a la biblioteca.
 setting_steam_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Steam.
 setting_steam_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Steam.
 sort_alphabetically	Alfabéticamente
