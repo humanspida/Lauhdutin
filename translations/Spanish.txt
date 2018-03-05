@@ -8,7 +8,7 @@ button_label_edit	Editar
 button_label_enabled	Activado
 button_label_hours_played	Horas de juego
 button_label_no	No
-button_label_none	Ninguna
+button_label_none	No hay
 button_label_open	Abrir
 button_label_save	Guardar
 button_label_starting_bangs	Bangs de inicio
