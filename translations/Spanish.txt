@@ -40,14 +40,14 @@ game_tag_create	Crear nueva etiqueta
 game_tags	Etiquetas
 game_visible	Visible
 main_context_title_execute_stopping_bangs	Ejecutar bangs de finalización
-main_context_title_open_shortcuts_folder	Ver carpeta de accesos directos
+main_context_title_open_shortcuts_folder	Carpeta de accesos directos
 main_context_title_settings	Ajustes
-main_context_title_start_hiding_games	Iniciar ocultar juegos
-main_context_title_start_removing_games	Iniciar eliminar juegos
-main_context_title_start_unhiding_games	Iniciar mostrar juegos
-main_context_title_stop_hiding_games	Finalizar ocultar juegos
-main_context_title_stop_removing_games	Finalizar eliminar juegos
-main_context_title_stop_unhiding_games	Finalizar mostrar juegos
+main_context_title_start_hiding_games	Iniciar ocultador de juegos
+main_context_title_start_removing_games	Iniciar eliminador de juegos
+main_context_title_start_unhiding_games	Iniciar mostrador de juegos
+main_context_title_stop_hiding_games	Finalizar ocultador de juegos
+main_context_title_stop_removing_games	Finalizar eliminador de juegos
+main_context_title_stop_unhiding_games	Finalizar mostrador de juegos
 main_no_games	No hay juegos que mostrar
 main_status_detecting_games	Detectando juegos
 main_status_detecting_platform_games	Detectando juegos de %s 
