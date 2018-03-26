@@ -16,7 +16,7 @@ button_label_stopping_bangs	Bangs de finalización
 button_label_yes	Sí
 filter_back_button_title	Atrás
 filter_clear_filters	Borrar filtros
-filter_from_platform	Por plataforma
+filter_from_platform	Plataforma
 filter_has_no_tags	Sin etiquetas
 filter_has_notes	Con notas
 filter_has_tag	Con etiquetas
