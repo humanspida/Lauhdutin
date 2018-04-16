@@ -109,8 +109,8 @@ setting_skin_hide_skin_description	Si está activada, la piel será ocultada mie
 setting_skin_hide_skin_title	Ocultar piel mientras se juega
 setting_skin_revealing_delay_description	La duración del retardo (en milisegundos) antes de que se reproduzca la animación de la piel para revelarla.
 setting_skin_revealing_delay_title	Retardo de revelado
-setting_skin_scroll_step_description	El número de filas / columnas de juegos que se desplazan en cada evento de desplazamiento.
-setting_skin_scroll_step_title	Nivel de desplazamiento
+setting_skin_scroll_step_description	El número de juegos que se desplazan en cada evento de desplazamiento.
+setting_skin_scroll_step_title	Cantidad de desplazamiento
 setting_skin_title	Piel
 setting_slots_center_on_monitor_description	Si está activada, algunas ventanas (p. ej. ordenar, filtrar) serán centradas en el monitor en el que la ventana de la piel principal esté activada.
 setting_slots_center_on_monitor_title	Centrar ventanas en el monitor actual
