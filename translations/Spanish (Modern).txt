@@ -137,7 +137,7 @@ setting_slots_width_title	Anchura de la ranura
 setting_steam_account_description	Elija la cuenta de Steam de la que obtener juegos.
 setting_steam_account_title	Cuenta
 setting_steam_client_path_description	La carpeta que contiene el ejecutable del cliente de Steam.
-setting_steam_community_profile_description	Si está activada, el perfil de la comunidad será descargado y analizado para obtener:\n- Todos los juegos de la cuenta elegida aunque no estén instalados en este momento.\n- El total de horas jugadas de cada juego de la cuenta elegida.\n\nRequiere que el perfil de la comunidad de Steam sea público.
+setting_steam_community_profile_description	Si está activada, el perfil de la comunidad será descargado y analizado para obtener:\n- Todos los juegos de la cuenta elegida aunque no estén instalados en este momento.\n- El total de horas jugadas de cada juego de la cuenta elegida.\n\nRequiere que la opción Game details del perfil de la comunidad de Steam tenga seleccionada la opción público.
 setting_steam_community_profile_title	Análisis del perfil de la comunidad
 setting_steam_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de Steam, incluyendo los juegos que no son de Steam que hayan sido añadidos manualmente a la biblioteca.
 setting_steam_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Steam.
