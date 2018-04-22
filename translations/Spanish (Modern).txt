@@ -1,4 +1,5 @@
 version 1
+button_label_bangs_none	Ninguno
 button_label_browse	Examinar
 button_label_cancel	Cancelar
 button_label_client_path	Ruta del cliente
@@ -8,7 +9,6 @@ button_label_edit	Editar
 button_label_enabled	Activado
 button_label_hours_played	Horas de juego
 button_label_no	No
-button_label_none	No hay
 button_label_open	Abrir
 button_label_save	Guardar
 button_label_starting_bangs	Bangs de inicio
@@ -32,12 +32,15 @@ game_last_played	Jugado por última vez
 game_last_played_never	Nunca
 game_no_banner	Sin imagen
 game_notes	Notas
+game_notes_none	Ninguna
 game_number_of_games	%d juegos
 game_path	Ruta
 game_platform	Plataforma
 game_process	Proceso
+game_process_none	Ninguno
 game_tag_create	Crear nueva etiqueta
 game_tags	Etiquetas
+game_tags_none	Ninguna
 game_visible	Visible
 main_context_title_execute_stopping_bangs	Ejecutar bangs de finalización
 main_context_title_open_shortcuts_folder	Carpeta de accesos directos
@@ -65,6 +68,7 @@ platform_name_windows_shortcut	Acceso directo de Windows
 search_window_all_title	Buscar
 search_window_current_title	Buscar (juegos actuales)
 setting_animation_label_jiggle	Sacudir
+setting_animation_label_none	Ninguna
 setting_animation_label_shake_left_right	Agitar a izquierda y derecha
 setting_animation_label_shake_up_down	Agitar arriba y abajo
 setting_animation_label_shrink	Contraer
