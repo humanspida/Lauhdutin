@@ -97,7 +97,7 @@ setting_gog_galaxy_starting_bangs_description	Estos bangs de Rainmeter son ejecu
 setting_gog_galaxy_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de GOG Galaxy.
 setting_localization_language_description	Selecciona un idioma.
 setting_localization_language_title	Idioma
-setting_logging_description	Si está activada, se imprimirán un montón de mensajes en el registro del Rainmeter. Útil para solucionar problemas.
+setting_logging_description	Si está activada, se grabarán un montón de mensajes en el registro de Rainmeter. Útil para solucionar problemas.
 setting_logging_title	Registro
 setting_number_of_backups_description	El número de copias de seguridad diarias de la lista de juegos que serán guardadas.
 setting_number_of_backups_title	Cantidad de copias de seguridad
