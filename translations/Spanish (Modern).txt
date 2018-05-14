@@ -19,7 +19,7 @@ filter_clear_filters	Borrar filtros
 filter_from_platform	Plataforma
 filter_has_no_tags	Sin etiquetas
 filter_has_notes	Con notas
-filter_has_tag	Con etiquetas
+filter_has_tag	Etiqueta
 filter_is_hidden	Oculto
 filter_is_uninstalled	Desinstalado
 filter_never_played	Nunca jugado
