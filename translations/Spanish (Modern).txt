@@ -62,6 +62,7 @@ overlay_hours_played	%.0f horas de juego
 overlay_install	Instalar
 overlay_platform_not_running	%s no se está ejecutando
 overlay_remove	Eliminar
+overlay_single_hour_played	%.0f hora de juego
 overlay_unhide	Mostrar
 overlay_uninstalled	Desinstalado
 platform_name_windows_shortcut	Acceso directo de Windows
