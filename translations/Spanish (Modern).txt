@@ -1,4 +1,5 @@
 version 1
+button_label_accept	Aceptar
 button_label_bangs_none	Ninguno
 button_label_browse	Examinar
 button_label_cancel	Cancelar
