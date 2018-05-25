@@ -271,6 +271,16 @@ There are a few rules that **must** be followed when adding support for addition
 Any deviations from the rules regarding adding platform support will most likely result in a rejected pull request.
 
 # Changelog
+**Version 2.8.0 - 2017/MM/DD:**
+- Added daily backups of *games.json*.
+- Added z-position adjustment when editing a game's process name.
+- Added more status messages when initializing the skin.
+- Updated the status messages for downloading banners to include the progress in percent.
+- Updated the debug status message for the number of banners to download to include Blizzard games.
+- Updated Steam support with more error messages.
+- Implemented a workaround for displaying exception messages with single quotation marks.
+- Fixed a bug that caused a thin black outline around slots when a hover animation was played. Requires that the skin is rebuilt for the change to take effect.
+
 **Version 2.7.1 - 2017/05/29:**
 - Updated to support GOG Galaxy 1.2.x.
 
