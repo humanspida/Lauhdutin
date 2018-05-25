@@ -11,6 +11,10 @@ button_label_enabled	Activado
 button_label_hours_played	Horas de juego
 button_label_no	No
 button_label_open	Abrir
+button_label_open_store_page	Abrir página de la tienda
+button_label_platform_not_supported	Plataforma no compatible
+button_label_platform_supported	Plataforma compatible
+button_label_reacquire_banner	Volver a descargar la imagen
 button_label_save	Guardar
 button_label_starting_bangs	Bangs de inicio
 button_label_stopping_bangs	Bangs de finalización
@@ -23,6 +27,7 @@ filter_has_notes	Con notas
 filter_has_tag	Etiqueta
 filter_is_hidden	Oculto
 filter_is_uninstalled	Desinstalado
+filter_lacks_tag	Carece de la etiqueta
 filter_never_played	Nunca jugado
 filter_random	Juego aleatorio
 filter_window_all_title	Filtrar
@@ -43,6 +48,7 @@ game_tag_create	Crear nueva etiqueta
 game_tags	Etiquetas
 game_tags_none	Ninguna
 game_visible	Visible
+main_context_title_detect_games	Detectar juegos
 main_context_title_execute_stopping_bangs	Ejecutar bangs de finalización
 main_context_title_open_shortcuts_folder	Carpeta de accesos directos
 main_context_title_settings	Ajustes
@@ -55,15 +61,22 @@ main_context_title_stop_unhiding_games	Finalizar mostrador de juegos
 main_no_games	No hay juegos que mostrar
 main_status_detecting_games	Detectando juegos
 main_status_detecting_platform_games	Detectando juegos de %s 
+main_status_detecting_platforms	Detectando plataformas
 main_status_n_banners_to_download	%d imágenes pendientes de descargar
 overlay_already_hidden	Ya está oculto
 overlay_already_visible	Ya está visible
 overlay_hide	Ocultar
 overlay_hours_played	%.0f horas de juego
 overlay_install	Instalar
+overlay_multiple_hour_multiple_minute_played	%.0f horas %.0f minutos de juego
+overlay_multiple_hour_single_minute_played	%.0f horas %.0f minuto de juego
+overlay_multiple_minutes_played	%.0f minutos de juego
 overlay_platform_not_running	%s no se está ejecutando
 overlay_remove	Eliminar
+overlay_single_hour_multiple_minute_played	%.0f hora %.0f minutos de juego
 overlay_single_hour_played	%.0f hora de juego
+overlay_single_hour_single_minute_played	%.0f hora %.0f minuto de juego
+overlay_single_minute_played	%.0f minuto de juego
 overlay_unhide	Mostrar
 overlay_uninstalled	Desinstalado
 platform_name_windows_shortcut	Acceso directo de Windows
@@ -89,6 +102,11 @@ setting_battlenet_paths_description	""Definir la ruta de la carpeta que contiene
 setting_battlenet_paths_title	Rutas
 setting_battlenet_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Blizzard Battle.net.
 setting_battlenet_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Blizzard Battle.net.
+setting_game_detection_frequency_always	Siempre
+setting_game_detection_frequency_description	La frecuencia con la que la piel debe intentar detectar juegos cuando sea iniciada. La detección de juegos también se puede activar manualmente a través del menú contextual.
+setting_game_detection_frequency_never	Nunca
+setting_game_detection_frequency_once_per_day	Una vez al día
+setting_game_detection_frequency_title	Frecuencia de detección de juegos
 setting_gog_galaxy_client_path_description	La carpeta que contiene el ejecutable del cliente de GOG Galaxy.
 setting_gog_galaxy_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de GOG Galaxy.
 setting_gog_galaxy_indirect_launch_description	Si está activada, los juegos serán ejecutados mediante el cliente de GOG Galaxy.\nEjecutándolos mediante el cliente permite usar su superposición y que el cliente registre las horas de juego.
@@ -134,6 +152,20 @@ setting_slots_hover_animation_description	La animación que es reproducida al pa
 setting_slots_hover_animation_title	Animación de ranura al pasar puntero
 setting_slots_overlay_enabled_description	Si está activada, se muestra una superposición con información contextual cuando el ratón está en una ranura.
 setting_slots_overlay_enabled_title	Superposición en ranuras
+setting_slots_overlay_images_enabled_description	Si está activada, la superposición muestra imágenes relativas al contexto.
+setting_slots_overlay_images_enabled_title	Mostrar imágenes en la superposición
+setting_slots_overlay_lower_text_description	El texto que se muestra en la mitad inferior de la superposición de la ranura.
+setting_slots_overlay_lower_text_title	Texto inferior de la superposición
+setting_slots_overlay_text_option_game_platform	Plataforma
+setting_slots_overlay_text_option_game_title	Título
+setting_slots_overlay_text_option_last_played_yyyymmdd	Jugado por última vez (AAAA-MM-DD)
+setting_slots_overlay_text_option_none	Nada
+setting_slots_overlay_text_option_notes	Notas
+setting_slots_overlay_text_option_time_played_hours	Horas de juego
+setting_slots_overlay_text_option_time_played_hours_and_minutes	Horas y minutos de juego
+setting_slots_overlay_text_option_time_played_hours_or_minutes	Horas o minutos de juego
+setting_slots_overlay_upper_text_description	El texto que se muestra en la mitad superior de la superposición de la ranura.
+setting_slots_overlay_upper_text_title	Texto superior de la superposición
 setting_slots_rows_description	La cantidad de filas de ranuras.
 setting_slots_rows_title	Cantidad de filas
 setting_slots_toolbar_at_top_description	Si está activada, la barra de herramientas está en la parte superior de la piel.
