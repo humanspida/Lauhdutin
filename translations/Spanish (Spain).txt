@@ -5,6 +5,7 @@ button_label_browse	Examinar
 button_label_cancel	Cancelar
 button_label_client_path	Ruta del cliente
 button_label_close	Cerrar
+button_label_detect_download	Detectar/descargar
 button_label_disabled	Desactivado
 button_label_edit	Editar
 button_label_enabled	Activado
@@ -14,9 +15,9 @@ button_label_open	Abrir
 button_label_open_store_page	Abrir página de la tienda
 button_label_platform_not_supported	Plataforma no compatible
 button_label_platform_supported	Plataforma compatible
-button_label_reacquire_banner	Volver a descargar la imagen
 button_label_save	Guardar
 button_label_starting_bangs	Bangs de inicio
+button_label_update_banner	Actualizar imagen
 button_label_stopping_bangs	Bangs de finalización
 button_label_yes	Sí
 filter_back_button_title	Atrás
@@ -135,6 +136,8 @@ setting_skin_revealing_delay_description	La duración del retardo (en milisegund
 setting_skin_revealing_delay_title	Retardo de revelado
 setting_skin_scroll_step_description	El número de juegos que se desplazan en cada evento de desplazamiento.
 setting_skin_scroll_step_title	Cantidad de desplazamiento
+setting_skin_show_session_description	Si está activada, se carga una pequeña piel que muestra la hora actual del sistema y la duración de la sesión de juego en formato HH:MM durante la partida.
+setting_skin_show_session_title	Piel de sesión de juego
 setting_skin_title	Piel
 setting_slots_center_on_monitor_description	Si está activada, algunas ventanas (p. ej. ordenar, filtrar) serán centradas en el monitor en el que la ventana de la piel principal esté activada.
 setting_slots_center_on_monitor_title	Centrar ventanas en el monitor actual
