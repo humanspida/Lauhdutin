@@ -22,14 +22,14 @@ button_label_stopping_bangs	Bangs de finalización
 button_label_yes	Sí
 filter_back_button_title	Atrás
 filter_clear_filters	Borrar filtros
-filter_from_platform	Plataforma
+filter_from_platform	En la plataforma
 filter_has_no_tags	Sin etiquetas
 filter_has_notes	Con notas
-filter_has_tag	Etiqueta
-filter_is_hidden	Oculto
-filter_is_uninstalled	Desinstalado
+filter_has_tag	Con la etiqueta
+filter_is_hidden	Ocultos
+filter_is_uninstalled	Desinstalados
 filter_lacks_tag	Carece de la etiqueta
-filter_never_played	Nunca jugado
+filter_never_played	Nunca jugados
 filter_random	Juego aleatorio
 filter_window_all_title	Filtrar
 filter_window_current_title	Filtrar (juegos actuales)
@@ -132,7 +132,7 @@ setting_skin_animation_description	La animación que es reproducida cuando el ra
 setting_skin_animation_title	Animación de la piel
 setting_skin_hide_skin_description	Si está activada, la piel será ocultada mientras se ejecuta un juego.
 setting_skin_hide_skin_title	Ocultar piel mientras se juega
-setting_skin_revealing_delay_description	La duración del retardo (en milisegundos) antes de que se reproduzca la animación de la piel para revelarla.
+setting_skin_revealing_delay_description	La duración del retardo (en milisegundos) antes de que se reproduzca la animación de la piel para hacerla visible.
 setting_skin_revealing_delay_title	Retardo de revelado
 setting_skin_scroll_step_description	El número de juegos que se desplazan en cada evento de desplazamiento.
 setting_skin_scroll_step_title	Cantidad de desplazamiento
@@ -171,7 +171,7 @@ setting_slots_overlay_upper_text_description	El texto que se muestra en la mitad
 setting_slots_overlay_upper_text_title	Texto superior de la superposición
 setting_slots_rows_description	La cantidad de filas de ranuras.
 setting_slots_rows_title	Cantidad de filas
-setting_slots_toolbar_at_top_description	Si está activada, la barra de herramientas está en la parte superior de la piel.
+setting_slots_toolbar_at_top_description	Si está activada, la barra de herramientas se sitúa en la parte superior de la piel.
 setting_slots_toolbar_at_top_title	Barra de herramientas en la parte superior
 setting_slots_width_description	La anchura de cada ranura en píxeles.
 setting_slots_width_title	Anchura de la ranura
