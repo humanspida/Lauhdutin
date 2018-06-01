@@ -22,17 +22,26 @@ button_label_stopping_bangs	Bangs de finalización
 button_label_yes	Sí
 filter_back_button_title	Atrás
 filter_clear_filters	Borrar filtros
-filter_from_platform	En la plataforma
-filter_has_no_tags	Sin etiquetas
-filter_has_notes	Con notas
-filter_has_tag	Con la etiqueta
-filter_is_hidden	Ocultos
-filter_is_uninstalled	Desinstalados
-filter_lacks_tag	Carece de la etiqueta
-filter_never_played	Nunca jugados
-filter_random	Juego aleatorio
+filter_from_platform	Están en la plataforma X
+filter_from_platform_inverse	No están en la plataforma X
+filter_has_no_tags	No tienen etiquetas
+filter_has_no_tags_inverse	Tienen una o más etiquetas
+filter_has_notes	Tienen notas
+filter_has_notes_inverse	No tienen notas
+filter_has_tag	Tienen la etiqueta X
+filter_has_tag_inverse	No tienen la etiqueta X
+filter_is_hidden	Están ocultos
+filter_is_hidden_inverse	Están visibles
+filter_is_uninstalled	Están desinstalados
+filter_is_uninstalled_inverse	Están instalados
+filter_lacks_tag	No tienen la etiqueta X
+filter_never_played	Nunca han sido jugados
+filter_never_played_inverse	Han sido jugados
+filter_random	Escoger un juego al azar
+filter_random_inverse	Quitar un juego al azar
 filter_window_all_title	Filtrar
 filter_window_current_title	Filtrar (juegos actuales)
+filter_window_invert_filters	Invertir filtros
 game_ignores_other_bangs	Ignorar otros bangs
 game_installed	Instalado
 game_last_played	Jugado por última vez
