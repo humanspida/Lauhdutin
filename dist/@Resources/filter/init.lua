@@ -397,7 +397,14 @@ createHasNoTagsProperty = function(numGamesWithoutTags, numGamesWithTags)
   return default, inverse
 end
 local createHiddenProperty
-createHiddenProperty = function(numHiddenGames, numVisibleGames)
+createHiddenProperty = function(numHiddenGames, games)
+  local numVisibleGames = 0
+  for _index_0 = 1, #games do
+    local game = games[_index_0]
+    if game:isVisible() then
+      numVisibleGames = numVisibleGames + 1
+    end
+  end
   local default
   if numHiddenGames < 1 then
     default = nil
@@ -537,7 +544,14 @@ createHasNotesProperty = function(games)
   return default, inverse
 end
 local createUninstalledProperty
-createUninstalledProperty = function(numUninstalledGames, numInstalledGames)
+createUninstalledProperty = function(numUninstalledGames, games)
+  local numInstalledGames = 0
+  for _index_0 = 1, #games do
+    local game = games[_index_0]
+    if game:isInstalled() then
+      numInstalledGames = numInstalledGames + 1
+    end
+  end
   local default
   if numUninstalledGames < 1 then
     default = nil
@@ -568,13 +582,13 @@ createUninstalledProperty = function(numUninstalledGames, numInstalledGames)
   return default, inverse
 end
 local createProperties
-createProperties = function(games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack)
+createProperties = function(games, hiddenGames, uninstalledGames, platforms, stack, filterStack)
   local defaultProperties = { }
   local inverseProperties = { }
-  local hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, #unhiddenGames)
+  local hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, games)
   table.insert(defaultProperties, hiddenDefault)
   table.insert(inverseProperties, hiddenInverse)
-  local uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, #installedGames)
+  local uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, games)
   table.insert(defaultProperties, uninstalledDefault)
   table.insert(inverseProperties, uninstalledInverse)
   if #games > 0 then
@@ -742,9 +756,7 @@ Handshake = function(stack, appliedFilters)
       platforms = _accum_0
     end
     local games = nil
-    local unhiddenGames = { }
     local hiddenGames = { }
-    local installedGames = { }
     local uninstalledGames = { }
     appliedFilters = appliedFilters:gsub('|', '"')
     local filterStack = json.decode(appliedFilters)
@@ -814,28 +826,21 @@ Handshake = function(stack, appliedFilters)
       end
       for i = #games, 1, -1 do
         if not games[i]:isVisible() then
-          if not filterHiddenGames then
-            table.insert(hiddenGames, table.remove(games, i))
-          else
+          if filterHiddenGames and (games[i]:isInstalled() or filterUninstalledGames) then
             table.insert(hiddenGames, i)
+          else
+            table.insert(hiddenGames, table.remove(games, i))
           end
-        else
-          if games[i]:isInstalled() or filterUninstalledGames then
-            table.insert(unhiddenGames, i)
-          end
-        end
-        if not games[i]:isInstalled() then
+        elseif not games[i]:isInstalled() then
           if not filterUninstalledGames then
             table.insert(uninstalledGames, table.remove(games, i))
           else
             table.insert(uninstalledGames, i)
           end
-        else
-          table.insert(installedGames, i)
         end
       end
     end
-    STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack)
+    STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, hiddenGames, uninstalledGames, platforms, stack, filterStack)
     STATE.PROPERTIES = STATE.DEFAULT_PROPERTIES
     updateScrollbar()
     updateSlots()

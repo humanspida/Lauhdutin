@@ -268,7 +268,10 @@ createHasNoTagsProperty = (numGamesWithoutTags, numGamesWithTags) ->
 	})
 	return default, inverse
 
-createHiddenProperty = (numHiddenGames, numVisibleGames) ->
+createHiddenProperty = (numHiddenGames, games) ->
+	numVisibleGames = 0
+	for game in *games
+		numVisibleGames += 1 if game\isVisible()
 	default = if numHiddenGames < 1 then nil else Property({
 		title: LOCALIZATION\get('filter_is_hidden', 'Is hidden')
 		value: STATE.NUM_GAMES_PATTERN\format(numHiddenGames)
@@ -356,7 +359,10 @@ createHasNotesProperty = (games) ->
 	})
 	return default, inverse
 
-createUninstalledProperty = (numUninstalledGames, numInstalledGames) ->
+createUninstalledProperty = (numUninstalledGames, games) ->
+	numInstalledGames = 0
+	for game in *games
+		numInstalledGames += 1 if game\isInstalled()
 	default = if numUninstalledGames < 1 then nil else Property({
 		title: LOCALIZATION\get('filter_is_uninstalled', 'Is not installed')
 		value: STATE.NUM_GAMES_PATTERN\format(numUninstalledGames)
@@ -376,13 +382,13 @@ createUninstalledProperty = (numUninstalledGames, numInstalledGames) ->
 	})
 	return default, inverse
 
-createProperties = (games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack) ->
+createProperties = (games, hiddenGames, uninstalledGames, platforms, stack, filterStack) ->
 	defaultProperties = {}
 	inverseProperties = {}
-	hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, #unhiddenGames)
+	hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, games)
 	table.insert(defaultProperties, hiddenDefault)
 	table.insert(inverseProperties, hiddenInverse)
-	uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, #installedGames)
+	uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, games)
 	table.insert(defaultProperties, uninstalledDefault)
 	table.insert(inverseProperties, uninstalledInverse)
 	if #games > 0
@@ -509,9 +515,7 @@ export Handshake = (stack, appliedFilters) ->
 			STATE.STACK = stack
 			platforms = [Platform(COMPONENTS.SETTINGS) for Platform in *require('main.platforms')]
 			games = nil
-			unhiddenGames = {}
 			hiddenGames = {}
-			installedGames = {}
 			uninstalledGames = {}
 			appliedFilters = appliedFilters\gsub('|', '"')
 			filterStack = json.decode(appliedFilters)
@@ -551,21 +555,16 @@ export Handshake = (stack, appliedFilters) ->
 				games = [Game(args) for args in *games.games]
 				for i = #games, 1, -1
 					if not games[i]\isVisible()
-						if not filterHiddenGames
-							table.insert(hiddenGames, table.remove(games, i))
-						else
+						if filterHiddenGames and (games[i]\isInstalled() or filterUninstalledGames)
 							table.insert(hiddenGames, i)
-					else
-						if games[i]\isInstalled() or filterUninstalledGames
-							table.insert(unhiddenGames, i)
-					if not games[i]\isInstalled()
+						else
+							table.insert(hiddenGames, table.remove(games, i))
+					elseif not games[i]\isInstalled()
 						if not filterUninstalledGames
 							table.insert(uninstalledGames, table.remove(games, i))
 						else
 							table.insert(uninstalledGames, i)
-					else
-						table.insert(installedGames, i)
-			STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack)
+			STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, hiddenGames, uninstalledGames, platforms, stack, filterStack)
 			STATE.PROPERTIES = STATE.DEFAULT_PROPERTIES
 			updateScrollbar()
 			updateSlots()
