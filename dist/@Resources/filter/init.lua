@@ -568,13 +568,13 @@ createUninstalledProperty = function(numUninstalledGames, numInstalledGames)
   return default, inverse
 end
 local createProperties
-createProperties = function(games, hiddenGames, uninstalledGames, platforms, stack, filterStack)
+createProperties = function(games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack)
   local defaultProperties = { }
   local inverseProperties = { }
-  local hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, #games)
+  local hiddenDefault, hiddenInverse = createHiddenProperty(#hiddenGames, #unhiddenGames)
   table.insert(defaultProperties, hiddenDefault)
   table.insert(inverseProperties, hiddenInverse)
-  local uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, #games)
+  local uninstalledDefault, uninstalledInverse = createUninstalledProperty(#uninstalledGames, #installedGames)
   table.insert(defaultProperties, uninstalledDefault)
   table.insert(inverseProperties, uninstalledInverse)
   if #games > 0 then
@@ -742,10 +742,14 @@ Handshake = function(stack, appliedFilters)
       platforms = _accum_0
     end
     local games = nil
+    local unhiddenGames = { }
     local hiddenGames = { }
+    local installedGames = { }
     local uninstalledGames = { }
     appliedFilters = appliedFilters:gsub('|', '"')
     local filterStack = json.decode(appliedFilters)
+    local filterHiddenGames = COMPONENTS.SETTINGS:getFilterHiddenGamesEnabled()
+    local filterUninstalledGames = COMPONENTS.SETTINGS:getFilterUninstalledGamesEnabled()
     if stack then
       SKIN:Bang(('[!SetOption "PageTitle" "Text" "%s"]'):format(LOCALIZATION:get('filter_window_current_title', 'Filter (current games)')))
       local library = require('shared.library')(COMPONENTS.SETTINGS, false)
@@ -810,13 +814,28 @@ Handshake = function(stack, appliedFilters)
       end
       for i = #games, 1, -1 do
         if not games[i]:isVisible() then
-          table.insert(hiddenGames, table.remove(games, i))
-        elseif not games[i]:isInstalled() then
-          table.insert(uninstalledGames, table.remove(games, i))
+          if not filterHiddenGames then
+            table.insert(hiddenGames, table.remove(games, i))
+          else
+            table.insert(hiddenGames, i)
+          end
+        else
+          if games[i]:isInstalled() or filterUninstalledGames then
+            table.insert(unhiddenGames, i)
+          end
+        end
+        if not games[i]:isInstalled() then
+          if not filterUninstalledGames then
+            table.insert(uninstalledGames, table.remove(games, i))
+          else
+            table.insert(uninstalledGames, i)
+          end
+        else
+          table.insert(installedGames, i)
         end
       end
     end
-    STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, hiddenGames, uninstalledGames, platforms, stack, filterStack)
+    STATE.DEFAULT_PROPERTIES, STATE.INVERSE_PROPERTIES = createProperties(games, unhiddenGames, hiddenGames, installedGames, uninstalledGames, platforms, stack, filterStack)
     STATE.PROPERTIES = STATE.DEFAULT_PROPERTIES
     updateScrollbar()
     updateSlots()

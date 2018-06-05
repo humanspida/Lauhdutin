@@ -463,6 +463,28 @@ do
             return COMPONENTS.SETTINGS:getSearchHiddenGamesEnabled()
           end
         }),
+        Settings.Boolean({
+          title = LOCALIZATION:get('setting_filter_uninstalled_games_enabled_title', 'Include uninstalled games in filter results'),
+          tooltip = LOCALIZATION:get('setting_filter_uninstalled_games_enabled_description', 'If enabled, then uninstalled games are included in the results when filtering among all games.'),
+          toggle = function()
+            COMPONENTS.SETTINGS:toggleFilterUninstalledGamesEnabled()
+            return true
+          end,
+          getState = function()
+            return COMPONENTS.SETTINGS:getFilterUninstalledGamesEnabled()
+          end
+        }),
+        Settings.Boolean({
+          title = LOCALIZATION:get('setting_filter_hidden_games_enabled_title', 'Include hidden games in filter results'),
+          tooltip = LOCALIZATION:get('setting_filter_hidden_games_enabled_description', 'If enabled, then hidden games are included in the results when filtering among all games.'),
+          toggle = function()
+            COMPONENTS.SETTINGS:toggleFilterHiddenGamesEnabled()
+            return true
+          end,
+          getState = function()
+            return COMPONENTS.SETTINGS:getFilterHiddenGamesEnabled()
+          end
+        }),
         Settings.Spinner({
           title = LOCALIZATION:get('setting_localization_language_title', 'Language'),
           tooltip = LOCALIZATION:get('setting_localization_language_description', 'Select a language.'),

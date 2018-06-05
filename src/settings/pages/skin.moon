@@ -347,6 +347,24 @@ class Skin extends Page
 				getState: () ->
 					return COMPONENTS.SETTINGS\getSearchHiddenGamesEnabled()
 			})
+			Settings.Boolean({
+				title: LOCALIZATION\get('setting_filter_uninstalled_games_enabled_title', 'Include uninstalled games in filter results')
+				tooltip: LOCALIZATION\get('setting_filter_uninstalled_games_enabled_description', 'If enabled, then uninstalled games are included in the results when filtering among all games.')
+				toggle: () ->
+					COMPONENTS.SETTINGS\toggleFilterUninstalledGamesEnabled()
+					return true
+				getState: () ->
+					return COMPONENTS.SETTINGS\getFilterUninstalledGamesEnabled()
+			})
+			Settings.Boolean({
+				title: LOCALIZATION\get('setting_filter_hidden_games_enabled_title', 'Include hidden games in filter results')
+				tooltip: LOCALIZATION\get('setting_filter_hidden_games_enabled_description', 'If enabled, then hidden games are included in the results when filtering among all games.')
+				toggle: () ->
+					COMPONENTS.SETTINGS\toggleFilterHiddenGamesEnabled()
+					return true
+				getState: () ->
+					return COMPONENTS.SETTINGS\getFilterHiddenGamesEnabled()
+			})
 			Settings.Spinner({
 				title: LOCALIZATION\get('setting_localization_language_title', 'Language')
 				tooltip: LOCALIZATION\get('setting_localization_language_description', 'Select a language.')

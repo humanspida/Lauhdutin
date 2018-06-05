@@ -165,6 +165,9 @@ local migrators = {
       settings.search = { }
       settings.search.uninstalledGamesEnabled = false
       settings.search.hiddenGamesEnabled = false
+      settings.filter = { }
+      settings.filter.uninstalledGamesEnabled = false
+      settings.filter.hiddenGamesEnabled = false
       settings.platforms.custom = { }
       settings.platforms.custom.bangs = {
         starting = { },
@@ -352,6 +355,18 @@ do
     end,
     toggleSearchHiddenGamesEnabled = function(self)
       self.settings.search.hiddenGamesEnabled = not self.settings.search.hiddenGamesEnabled
+    end,
+    getFilterUninstalledGamesEnabled = function(self)
+      return self.settings.filter.uninstalledGamesEnabled or false
+    end,
+    toggleFilterUninstalledGamesEnabled = function(self)
+      self.settings.filter.uninstalledGamesEnabled = not self.settings.filter.uninstalledGamesEnabled
+    end,
+    getFilterHiddenGamesEnabled = function(self)
+      return self.settings.filter.hiddenGamesEnabled or false
+    end,
+    toggleFilterHiddenGamesEnabled = function(self)
+      self.settings.filter.hiddenGamesEnabled = not self.settings.filter.hiddenGamesEnabled
     end,
     getLayoutRows = function(self)
       return self.settings.layout.rows or 1
@@ -774,6 +789,10 @@ do
           }
         },
         search = {
+          uninstalledGamesEnabled = false,
+          hiddenGamesEnabled = false
+        },
+        filter = {
           uninstalledGamesEnabled = false,
           hiddenGamesEnabled = false
         },

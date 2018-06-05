@@ -121,6 +121,10 @@ setting_battlenet_starting_bangs_description	These Rainmeter bangs are executed 
 setting_battlenet_stopping_bangs_description	These Rainmeter bangs are executed just after any Blizzard Battle.net game terminates.
 setting_custom_starting_bangs_description	These Rainmeter bangs are executed just before any Custom game launches.
 setting_custom_stopping_bangs_description	These Rainmeter bangs are executed just after any Custom game terminates.
+setting_filter_hidden_games_enabled_description If enabled, then hidden games are included in the results when filtering among all games.
+setting_filter_hidden_games_enabled_title Include hidden games in filter results
+setting_filter_uninstalled_games_enabled_description  If enabled, then uninstalled games are included in the results when filtering among all games.
+setting_filter_uninstalled_games_enabled_title  Include uninstalled games in filter results
 setting_game_detection_frequency_always	Always
 setting_game_detection_frequency_description	How often the skin should attempt to detect games when the skin is loaded. Game detection can also be triggered manually via the context menu.
 setting_game_detection_frequency_never	Never

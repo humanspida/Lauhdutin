@@ -148,6 +148,9 @@ migrators = {
 			settings.search = {}
 			settings.search.uninstalledGamesEnabled = false
 			settings.search.hiddenGamesEnabled = false
+			settings.filter = {}
+			settings.filter.uninstalledGamesEnabled = false
+			settings.filter.hiddenGamesEnabled = false
 			settings.platforms.custom = {}
 			settings.platforms.custom.bangs = {
 				starting: {}
@@ -174,6 +177,10 @@ class Settings
 				}
 			}
 			search: {
+				uninstalledGamesEnabled: false
+				hiddenGamesEnabled: false
+			}
+			filter: {
 				uninstalledGamesEnabled: false
 				hiddenGamesEnabled: false
 			}
@@ -361,6 +368,15 @@ class Settings
 	getSearchHiddenGamesEnabled: () => return @settings.search.hiddenGamesEnabled or false
 
 	toggleSearchHiddenGamesEnabled: () => @settings.search.hiddenGamesEnabled = not @settings.search.hiddenGamesEnabled
+
+	-- Filter
+	getFilterUninstalledGamesEnabled: () => return @settings.filter.uninstalledGamesEnabled or false
+
+	toggleFilterUninstalledGamesEnabled: () => @settings.filter.uninstalledGamesEnabled = not @settings.filter.uninstalledGamesEnabled
+
+	getFilterHiddenGamesEnabled: () => return @settings.filter.hiddenGamesEnabled or false
+
+	toggleFilterHiddenGamesEnabled: () => @settings.filter.hiddenGamesEnabled = not @settings.filter.hiddenGamesEnabled
 
 	-- Layout
 	getLayoutRows: () => return @settings.layout.rows or 1
