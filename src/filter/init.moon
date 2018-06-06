@@ -551,7 +551,7 @@ export Handshake = (stack, appliedFilters) ->
 				games = [Game(args) for args in *games.games]
 				for i = #games, 1, -1
 					numInstalledGames += 1 if games[i]\isInstalled()
-					numVisibleGames += 1 if games[i]\isVisible()
+					numVisibleGames += 1 if games[i]\isVisible() and (games[i]\isInstalled() or filterUninstalledGames)
 					if not games[i]\isVisible()
 						if filterHiddenGames and (games[i]\isInstalled() or filterUninstalledGames)
 							table.insert(hiddenGames, i)

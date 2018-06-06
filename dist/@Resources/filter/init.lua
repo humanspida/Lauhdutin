@@ -816,7 +816,7 @@ Handshake = function(stack, appliedFilters)
         if games[i]:isInstalled() then
           numInstalledGames = numInstalledGames + 1
         end
-        if games[i]:isVisible() then
+        if games[i]:isVisible() and (games[i]:isInstalled() or filterUninstalledGames) then
           numVisibleGames = numVisibleGames + 1
         end
         if not games[i]:isVisible() then
