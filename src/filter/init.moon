@@ -530,21 +530,21 @@ export Handshake = (stack, appliedFilters) ->
 				temp = nil
 				library\finalize(platformsEnabledStatus)
 				games = library\get()
-				showHiddenGames = false
-				showUninstalledGames = false
 				for f in *filterStack
-					if f.filter == ENUMS.FILTER_TYPES.HIDDEN and f.args.state == true
-						showHiddenGames = true
-					elseif f.filter == ENUMS.FILTER_TYPES.UNINSTALLED and f.args.state == true
-						showUninstalledGames = true
 					f.args.games = games
 					library\filter(f.filter, f.args)
 					games = library\get()
 				for i = #games, 1, -1
-					if not games[i]\isVisible() and not showHiddenGames
-						table.insert(hiddenGames, table.remove(games, i))
-					elseif not games[i]\isInstalled() and not (showUninstalledGames or showHiddenGames)
-						table.insert(uninstalledGames, table.remove(games, i))
+					numInstalledGames += 1 if games[i]\isInstalled()
+					numVisibleGames += 1 if games[i]\isVisible()
+					if not games[i]\isVisible()
+						if not games[i]\isInstalled()
+							table.insert(hiddenGames, i)
+							table.insert(uninstalledGames, i)
+						else
+							table.insert(hiddenGames, i)
+					elseif not games[i]\isInstalled()
+						table.insert(uninstalledGames, i)
 			else
 				platforms = [platform for platform in *platforms when platform\isEnabled()]
 				games = io.readJSON('games.json')
@@ -555,6 +555,9 @@ export Handshake = (stack, appliedFilters) ->
 					if not games[i]\isVisible()
 						if filterHiddenGames and (games[i]\isInstalled() or filterUninstalledGames)
 							table.insert(hiddenGames, i)
+						elseif filterHiddenGames and not games[i]\isInstalled()
+							table.insert(hiddenGames, i)
+							table.insert(uninstalledGames, i)
 						else
 							table.insert(hiddenGames, table.remove(games, i))
 					elseif not games[i]\isInstalled()

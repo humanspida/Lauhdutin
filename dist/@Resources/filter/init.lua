@@ -767,24 +767,28 @@ Handshake = function(stack, appliedFilters)
       temp = nil
       library:finalize(platformsEnabledStatus)
       games = library:get()
-      local showHiddenGames = false
-      local showUninstalledGames = false
       for _index_0 = 1, #filterStack do
         local f = filterStack[_index_0]
-        if f.filter == ENUMS.FILTER_TYPES.HIDDEN and f.args.state == true then
-          showHiddenGames = true
-        elseif f.filter == ENUMS.FILTER_TYPES.UNINSTALLED and f.args.state == true then
-          showUninstalledGames = true
-        end
         f.args.games = games
         library:filter(f.filter, f.args)
         games = library:get()
       end
       for i = #games, 1, -1 do
-        if not games[i]:isVisible() and not showHiddenGames then
-          table.insert(hiddenGames, table.remove(games, i))
-        elseif not games[i]:isInstalled() and not (showUninstalledGames or showHiddenGames) then
-          table.insert(uninstalledGames, table.remove(games, i))
+        if games[i]:isInstalled() then
+          numInstalledGames = numInstalledGames + 1
+        end
+        if games[i]:isVisible() then
+          numVisibleGames = numVisibleGames + 1
+        end
+        if not games[i]:isVisible() then
+          if not games[i]:isInstalled() then
+            table.insert(hiddenGames, i)
+            table.insert(uninstalledGames, i)
+          else
+            table.insert(hiddenGames, i)
+          end
+        elseif not games[i]:isInstalled() then
+          table.insert(uninstalledGames, i)
         end
       end
     else
@@ -822,6 +826,9 @@ Handshake = function(stack, appliedFilters)
         if not games[i]:isVisible() then
           if filterHiddenGames and (games[i]:isInstalled() or filterUninstalledGames) then
             table.insert(hiddenGames, i)
+          elseif filterHiddenGames and not games[i]:isInstalled() then
+            table.insert(hiddenGames, i)
+            table.insert(uninstalledGames, i)
           else
             table.insert(hiddenGames, table.remove(games, i))
           end
