@@ -407,18 +407,18 @@ do
               break
             end
             if not game:isVisible() then
-              if not game:isInstalled() and (self.searchHiddenGames == true or self.filterHiddenGames == true) then
-                if not (self.searchUninstalledGames == true or self.filterUninstalledGames == true) then
+              if not game:isInstalled() and (self.searchHiddenGames or self.filterHiddenGames) then
+                if not (self.searchUninstalledGames and filter == ENUMS.FILTER_TYPES.TITLE or self.filterUninstalledGames and filter > ENUMS.FILTER_TYPES.TITLE) then
                   _continue_0 = true
                   break
                 end
               end
-              if not (filter == ENUMS.FILTER_TYPES.HIDDEN or filter == ENUMS.FILTER_TYPES.TITLE and self.searchHiddenGames == true or filter > ENUMS.FILTER_TYPES.TITLE and self.filterHiddenGames == true) then
+              if not (filter == ENUMS.FILTER_TYPES.HIDDEN or filter == ENUMS.FILTER_TYPES.TITLE and self.searchHiddenGames or filter > ENUMS.FILTER_TYPES.TITLE and self.filterHiddenGames) then
                 _continue_0 = true
                 break
               end
             elseif not game:isInstalled() then
-              if not (filter == ENUMS.FILTER_TYPES.UNINSTALLED or filter == ENUMS.FILTER_TYPES.TITLE and self.searchUninstalledGames == true or filter > ENUMS.FILTER_TYPES.TITLE and self.filterUninstalledGames == true) then
+              if not (filter == ENUMS.FILTER_TYPES.UNINSTALLED or filter == ENUMS.FILTER_TYPES.TITLE and self.searchUninstalledGames or filter > ENUMS.FILTER_TYPES.TITLE and self.filterUninstalledGames) then
                 _continue_0 = true
                 break
               end

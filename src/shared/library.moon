@@ -339,11 +339,11 @@ class Library
 			for game in *@games
 				continue unless @platformEnabledStatus[game\getPlatformID()] == true
 				if not game\isVisible()
-					if not game\isInstalled() and (@searchHiddenGames == true or @filterHiddenGames == true)
-						continue unless @searchUninstalledGames == true or @filterUninstalledGames == true
-					continue unless filter == ENUMS.FILTER_TYPES.HIDDEN or filter == ENUMS.FILTER_TYPES.TITLE and @searchHiddenGames == true or filter > ENUMS.FILTER_TYPES.TITLE and @filterHiddenGames == true
+					if not game\isInstalled() and (@searchHiddenGames or @filterHiddenGames)
+						continue unless @searchUninstalledGames and filter == ENUMS.FILTER_TYPES.TITLE or @filterUninstalledGames and filter > ENUMS.FILTER_TYPES.TITLE
+					continue unless filter == ENUMS.FILTER_TYPES.HIDDEN or filter == ENUMS.FILTER_TYPES.TITLE and @searchHiddenGames or filter > ENUMS.FILTER_TYPES.TITLE and @filterHiddenGames
 				elseif not game\isInstalled()
-					continue unless filter == ENUMS.FILTER_TYPES.UNINSTALLED or filter == ENUMS.FILTER_TYPES.TITLE and @searchUninstalledGames == true or filter > ENUMS.FILTER_TYPES.TITLE and @filterUninstalledGames == true
+					continue unless filter == ENUMS.FILTER_TYPES.UNINSTALLED or filter == ENUMS.FILTER_TYPES.TITLE and @searchUninstalledGames or filter > ENUMS.FILTER_TYPES.TITLE and @filterUninstalledGames
 				table.insert(gamesToProcess, game)
 			if filter == ENUMS.FILTER_TYPES.NONE
 				@filterStack = {}
