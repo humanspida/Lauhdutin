@@ -10,6 +10,7 @@ button_label_disabled	Desactivado
 button_label_edit	Editar
 button_label_enabled	Activado
 button_label_hours_played	Horas de juego
+button_label_next	Siguiente
 button_label_no	No
 button_label_open	Abrir
 button_label_open_store_page	Abrir página de la tienda
@@ -30,18 +31,17 @@ filter_has_notes	Tienen notas
 filter_has_notes_inverse	No tienen notas
 filter_has_tag	Tienen la etiqueta X
 filter_has_tag_inverse	No tienen la etiqueta X
+filter_invert_filters	Invertir filtros
 filter_is_hidden	Están ocultos
 filter_is_hidden_inverse	Están visibles
 filter_is_uninstalled	Están desinstalados
 filter_is_uninstalled_inverse	Están instalados
-filter_lacks_tag	No tienen la etiqueta X
 filter_never_played	Nunca han sido jugados
 filter_never_played_inverse	Han sido jugados
 filter_random	Escoger un juego al azar
 filter_random_inverse	Quitar un juego al azar
 filter_window_all_title	Filtrar
 filter_window_current_title	Filtrar (juegos actuales)
-filter_window_invert_filters	Invertir filtros
 game_ignores_other_bangs	Ignorar otros bangs
 game_installed	Instalado
 game_last_played	Jugado por última vez
@@ -57,7 +57,9 @@ game_process_none	Ninguno
 game_tag_create	Crear nueva etiqueta
 game_tags	Etiquetas
 game_tags_none	Ninguna
+game_title	Título
 game_visible	Visible
+main_context_title_add_game	Añadir un juego
 main_context_title_detect_games	Detectar juegos
 main_context_title_execute_stopping_bangs	Ejecutar bangs de finalización
 main_context_title_open_shortcuts_folder	Carpeta de accesos directos
@@ -73,6 +75,10 @@ main_status_detecting_games	Detectando juegos
 main_status_detecting_platform_games	Detectando juegos de %s 
 main_status_detecting_platforms	Detectando plataformas
 main_status_n_banners_to_download	%d imágenes pendientes de descargar
+newgame_game_with_same_title_exists	Ya existe un juego con ese título#CRLF##CRLF#Clic para cerrar.
+newgame_missing_path	No se ha definido una ruta#CRLF##CRLF#Clic para cerrar.
+newgame_missing_title	No se ha definido un título#CRLF##CRLF#Clic para cerrar.
+newgame_window_title	Nuevo juego
 overlay_already_hidden	Ya está oculto
 overlay_already_visible	Ya está visible
 overlay_hide	Ocultar
@@ -89,6 +95,7 @@ overlay_single_hour_single_minute_played	%.0f hora %.0f minuto de juego
 overlay_single_minute_played	%.0f minuto de juego
 overlay_unhide	Mostrar
 overlay_uninstalled	Desinstalado
+platform_name_custom	Personalizado
 platform_name_windows_shortcut	Acceso directo de Windows
 search_window_all_title	Buscar
 search_window_current_title	Buscar (juegos actuales)
@@ -112,12 +119,18 @@ setting_battlenet_paths_description	""Definir la ruta de la carpeta que contiene
 setting_battlenet_paths_title	Rutas
 setting_battlenet_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego de Blizzard Battle.net.
 setting_battlenet_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego de Blizzard Battle.net.
+setting_custom_starting_bangs_description	Estos bangs de Rainmeter son ejecutados al empezar la ejecución de un juego Personalizado.
+setting_custom_stopping_bangs_description	Estos bangs de Rainmeter son ejecutados al finalizar la ejecución de un juego Personalizado.
 setting_game_detection_frequency_always	Siempre
 setting_game_detection_frequency_description	La frecuencia con la que la piel debe intentar detectar juegos cuando sea iniciada. La detección de juegos también se puede activar manualmente a través del menú contextual.
 setting_game_detection_frequency_never	Nunca
 setting_game_detection_frequency_once_per_day	Una vez al día
 setting_game_detection_frequency_title	Frecuencia de detección de juegos
 setting_gog_galaxy_client_path_description	La carpeta que contiene el ejecutable del cliente de GOG Galaxy.
+setting_gog_galaxy_community_profile_description	Si está activada, el perfil de la comunidad será descargado y analizado para obtener todos los juegos asociados con la cuenta elegida incluso si no están instalados.\n\nRequiere que el perfil sea público.
+setting_gog_galaxy_community_profile_name_description	El nombre del perfil de GOG a descargar y analizar
+setting_gog_galaxy_community_profile_name_title	Nombre del perfil de la comunidad
+setting_gog_galaxy_community_profile_title	Análisis del perfil de la comunidad
 setting_gog_galaxy_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de GOG Galaxy.
 setting_gog_galaxy_indirect_launch_description	Si está activada, los juegos serán ejecutados mediante el cliente de GOG Galaxy.\nEjecutándolos mediante el cliente permite usar su superposición y que el cliente registre las horas de juego.
 setting_gog_galaxy_indirect_launch_title	Iniciar a través del cliente
@@ -131,6 +144,10 @@ setting_logging_description	Si está activada, se grabarán un montón de mensaj
 setting_logging_title	Registro
 setting_number_of_backups_description	El número de copias de seguridad diarias de la lista de juegos que serán guardadas.
 setting_number_of_backups_title	Cantidad de copias de seguridad
+setting_search_hidden_games_enabled_description	Si está activada, los juegos ocultos se incluyen en los resultados al buscar por nombre entre todos los juegos.
+setting_search_hidden_games_enabled_title	Incluir juegos ocultos en los resultados de búsqueda
+setting_search_uninstalled_games_enabled_description	Si está activada, los juegos desinstalados se incluyen en los resultados al buscar por nombre entre todos los juegos.
+setting_search_uninstalled_games_enabled_title	Incluir juegos desinstalados en los resultados de búsqueda
 setting_shortcuts_enabled_description	Si está activada, serán añadidos los accesos directos de Windows situados en la carpeta designada.
 setting_shortcuts_open_folder_description	Accesos directos y sus imágenes deben ser situados en esta carpeta. Las imágenes deben llevar el nombre de su respectivo acceso directo.
 setting_shortcuts_open_folder_title	Carpeta
