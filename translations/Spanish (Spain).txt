@@ -128,7 +128,7 @@ setting_game_detection_frequency_once_per_day	Una vez al día
 setting_game_detection_frequency_title	Frecuencia de detección de juegos
 setting_gog_galaxy_client_path_description	La carpeta que contiene el ejecutable del cliente de GOG Galaxy.
 setting_gog_galaxy_community_profile_description	Si está activada, el perfil de la comunidad será descargado y analizado para obtener todos los juegos asociados con la cuenta elegida incluso si no están instalados.\n\nRequiere que el perfil sea público.
-setting_gog_galaxy_community_profile_name_description	El nombre del perfil de GOG a descargar y analizar
+setting_gog_galaxy_community_profile_name_description	El nombre del perfil de GOG a descargar y analizar.
 setting_gog_galaxy_community_profile_name_title	Nombre del perfil de la comunidad
 setting_gog_galaxy_community_profile_title	Análisis del perfil de la comunidad
 setting_gog_galaxy_enabled_description	Si está activada, serán añadidos los juegos instalados con el cliente de GOG Galaxy.
