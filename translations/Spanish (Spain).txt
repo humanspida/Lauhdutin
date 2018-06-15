@@ -145,9 +145,9 @@ setting_logging_title	Registro
 setting_number_of_backups_description	El número de copias de seguridad diarias de la lista de juegos que serán guardadas.
 setting_number_of_backups_title	Cantidad de copias de seguridad
 setting_search_hidden_games_enabled_description	Si está activada, los juegos ocultos se incluyen en los resultados al buscar por nombre entre todos los juegos.
-setting_search_hidden_games_enabled_title	Incluir juegos ocultos en los resultados de búsqueda
+setting_search_hidden_games_enabled_title	Incluir juegos ocultos en búsquedas
 setting_search_uninstalled_games_enabled_description	Si está activada, los juegos desinstalados se incluyen en los resultados al buscar por nombre entre todos los juegos.
-setting_search_uninstalled_games_enabled_title	Incluir juegos desinstalados en los resultados de búsqueda
+setting_search_uninstalled_games_enabled_title	Incluir juegos desinstalados en búsquedas
 setting_shortcuts_enabled_description	Si está activada, serán añadidos los accesos directos de Windows situados en la carpeta designada.
 setting_shortcuts_open_folder_description	Accesos directos y sus imágenes deben ser situados en esta carpeta. Las imágenes deben llevar el nombre de su respectivo acceso directo.
 setting_shortcuts_open_folder_title	Carpeta
