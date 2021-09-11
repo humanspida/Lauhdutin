@@ -2,9 +2,14 @@ Platform = require('main.platforms.platform')
 Game = require('main.game')
 json = require('lib.json')
 
--- Dump "productId" and "localpath" columns from the "Products" table of "index.db":
--- - productId: Unique ID associated with a game.
--- - localpath: The absolute path to the folder containing the game.
+-- New version
+--   Dump "productId" and "installationPath" columns from the "InstalledBaseProducts" table of "galaxy.db":
+--   - productId: Unique ID associated with a game.
+--   - installationPath: The absolute path to the folder containing the game.
+-- Old version
+--   Dump "productId" and "localpath" columns from the "Products" table of "index.db":
+--   - productId: Unique ID associated with a game.
+--   - localpath: The absolute path to the folder containing the game.
 --
 -- Dump "productId", "title", and "images" columns from the "LimitedDetails" table of "galaxy.db"
 -- - productId: Same as above.
@@ -31,8 +36,7 @@ class GOGGalaxy extends Platform
 		@games = {}
 
 	validate: () =>
-		assert(io.fileExists(io.joinPaths(@programDataPath, 'storage\\index.db'), false), 'The path to GOG Galaxy\'s ProgramData directory is not valid.')
-		assert(io.fileExists(io.joinPaths(@programDataPath, 'storage\\index.db'), false), 'The path to GOG Galaxy\'s ProgramData directory is not valid.')
+		assert(io.fileExists(io.joinPaths(@programDataPath, 'storage\\galaxy.db'), false), 'The path to GOG Galaxy\'s ProgramData directory is not valid.')
 		if @clientPath ~= nil
 			@clientPath = io.joinPaths(@clientPath, 'GalaxyClient.exe')
 			if @indirectLaunch
@@ -48,7 +52,6 @@ class GOGGalaxy extends Platform
 		assert(@programDataPath ~= nil, 'The path to GOG Galaxy\'s ProgramData path has not been defined.')
 		indexDBPath = io.joinPaths(@programDataPath, 'storage\\index.db')
 		galaxyDBPath = io.joinPaths(@programDataPath, 'storage\\galaxy.db')
-		assert(io.fileExists(indexDBPath, false) == true, ('"%s" does not exist.')\format(indexDBPath))
 		assert(io.fileExists(galaxyDBPath, false) == true, ('"%s" does not exist.')\format(galaxyDBPath))
 		sqlitePath = io.joinPaths(STATE.PATHS.RESOURCES, 'sqlite3.exe')
 		assert(io.fileExists(sqlitePath, false) == true, ('SQLite3 CLI tool is missing. Expected the path to be "%s".')\format(sqlitePath))
@@ -106,10 +109,20 @@ class GOGGalaxy extends Platform
 
 	getExePath: (info) =>
 		assert(type(info) == 'table', 'main.platforms.gog_galaxy.init.GOGGalaxy.getExePath')
-		return nil if type(info.playTasks) ~= 'table'
-		return nil if type(info.playTasks[1]) ~= 'table'
-		return nil if type(info.playTasks[1].path) ~= 'string'
-		return (info.playTasks[1].path\gsub('//', '\\'))
+		return nil, nil if type(info.playTasks) ~= 'table'
+		task = nil
+		for t in *info.playTasks
+			if t.isPrimary == true
+				task = t
+				break
+		if task == nil
+			return nil, nil if type(info.playTasks[1]) ~= 'table'
+			return nil, nil if type(info.playTasks[1].path) ~= 'string'
+			task = info.playTasks[1]
+		path = (task.path\gsub('//', '\\'))
+		if task.arguments ~= nil
+			return path, task.arguments
+		return path, nil
 
 	-- TODO: Refactor to allow for tests
 	generateGames: (indexOutput, galaxyOutput) =>
@@ -124,7 +137,7 @@ class GOGGalaxy extends Platform
 			if type(info) ~= 'table'
 				log('Skipping GOG Galaxy game', productID, 'because the info file could not be found')
 				continue
-			exePath = @getExePath(info)
+			exePath, arguments = @getExePath(info)
 			if type(exePath) ~= 'string'
 				log('Skipping GOG Galaxy game', productID, 'because the path to the executable could not be found')
 				continue
@@ -136,7 +149,10 @@ class GOGGalaxy extends Platform
 					unless io.fileExists(fullPath, false)
 						nil
 					else
-						('"%s"')\format(fullPath)
+						if arguments == nil
+							('"%s"')\format(fullPath)
+						else
+							('"%s" "%s"')\format(fullPath, arguments)
 			title = titles[productID]
 			if title == nil
 				log('Skipping GOG Galaxy game', productID, 'because title could not be found')

@@ -1,3 +1,16 @@
+**Version 3.0.4 - 2018/06/26:**
+- Updated to support the new version of the Blizzard Battle.net launcher.
+- Fixed a bug in the context menu option for opening the shortcuts folder.
+
+**Version 3.0.3 - 2018/05/30:**
+- Updated GOG Galaxy support to include arguments in the paths of games.
+
+**Version 3.0.2 - 2018/05/30:**
+- Updated to support the latest version of GOG Galaxy.
+
+**Version 3.0.1 - 2018/05/26:**
+- Fixed the manner in which arguments of Windows shortcuts are parsed.
+
 **Version 3.0.0 - 2018/05/25:**
 - Updated error messages related to version numbers of games, settings, and translations.
 - Updated error messages to clarify that the preceding number is the line number in the Lua file where the error occurred rather than an error code.
