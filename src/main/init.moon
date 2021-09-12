@@ -22,6 +22,7 @@ export STATE = {
 	NUM_SLOTS: 0
 	SCROLL_INDEX: 1
 	SCROLL_STEP: 1
+	SCROLL_INDEX_UPDATED: nil
 	LEFT_CLICK_ACTION: 1
 	PLATFORM_NAMES: {}
 	PLATFORM_RUNNING_STATUS: {}
@@ -42,7 +43,7 @@ export COMPONENTS = {
 	LIBRARY: nil
 }
 
-export log = (...) -> print(...) if STATE.LOGGING == true
+export HideStatus = () -> COMPONENTS.STATUS\hide()
 
 downloadFile = (url, path, finishCallback, errorCallback) ->
 	log('Attempting to download file:', url, path, finishCallback, errorCallback)
@@ -108,12 +109,20 @@ startDetectingPlatformGames = () ->
 				OnFinishedDetectingPlatformGames()
 		when ENUMS.PLATFORM_IDS.GOG_GALAXY
 			log('Starting to detect GOG Galaxy games')
-			utility.runCommand(STATE.PLATFORM_QUEUE[1]\dumpDatabases())
+			parameter, output, callback = STATE.PLATFORM_QUEUE[1]\downloadCommunityProfile()
+			if parameter ~= nil
+				utility.runCommand(parameter, output, callback)
+			else
+				utility.runCommand(STATE.PLATFORM_QUEUE[1]\dumpDatabases())
+		when ENUMS.PLATFORM_IDS.CUSTOM
+			log('Starting to detect Custom games')
+			STATE.PLATFORM_QUEUE[1]\detectBanners(COMPONENTS.LIBRARY\getOldGames())
+			OnFinishedDetectingPlatformGames()
 		else
 			assert(nil, 'main.init.startDetectingPlatformGames')
 
-detectGames = () ->
-	COMPONENTS.STATUS\show(LOCALIZATION\get('main_status_detecting_games', 'Detecting games'))
+detectPlatforms = () ->
+	COMPONENTS.STATUS\show(LOCALIZATION\get('main_status_detecting_platforms', 'Detecting platforms'))
 	platforms = [Platform(COMPONENTS.SETTINGS) for Platform in *require('main.platforms')]
 	log('Num platforms:', #platforms)
 	COMPONENTS.PROCESS\registerPlatforms(platforms)
@@ -129,6 +138,9 @@ detectGames = () ->
 		table.insert(STATE.PLATFORM_QUEUE, platform) if enabled
 		log(' ' .. STATE.PLATFORM_NAMES[platformID] .. ' = ' .. tostring(enabled))
 	assert(#STATE.PLATFORM_QUEUE > 0, 'There are no enabled platforms.')
+
+detectGames = () ->
+	COMPONENTS.STATUS\show(LOCALIZATION\get('main_status_detecting_games', 'Detecting games'))
 	STATE.BANNER_QUEUE = {}
 	startDetectingPlatformGames()
 
@@ -179,7 +191,6 @@ onInitialized = () ->
 	if animationType ~= ENUMS.SKIN_ANIMATIONS.NONE
 		COMPONENTS.ANIMATIONS\pushSkinSlide(animationType, false)
 		setUpdateDivider(1)
-	COMPONENTS.PROCESS\update()
 	log('Skin initialized')
 
 additionalEnums = () ->
@@ -200,14 +211,14 @@ export Initialize = () ->
 		() ->
 			require('shared.enums')
 			additionalEnums()
-			Game = require('main.game')
 			utility = require('shared.utility')
 			utility.createJSONHelpers()
 			json = require('lib.json')
 			COMPONENTS.SETTINGS = require('shared.settings')()
-			STATE.LOGGING = COMPONENTS.SETTINGS\getLogging()
+			export log = if COMPONENTS.SETTINGS\getLogging() == true then (...) -> print(...) else () -> return
+			Game = require('main.game')
+			log('Initializing Main config')
 			STATE.SCROLL_STEP = COMPONENTS.SETTINGS\getScrollStep()
-			log('Initializing skin')
 			export LOCALIZATION = require('shared.localization')(COMPONENTS.SETTINGS)
 			COMPONENTS.STATUS\show(LOCALIZATION\get('status_initializing', 'Initializing'))
 			SKIN\Bang(('[!SetVariable "ContextTitleSettings" "%s"]')\format(LOCALIZATION\get('main_context_title_settings', 'Settings')))
@@ -216,14 +227,20 @@ export Initialize = () ->
 			SKIN\Bang(('[!SetVariable "ContextTitleHideGamesStatus" "%s"]')\format(LOCALIZATION\get('main_context_title_start_hiding_games', 'Start hiding games')))
 			SKIN\Bang(('[!SetVariable "ContextTitleUnhideGameStatus" "%s"]')\format(LOCALIZATION\get('main_context_title_start_unhiding_games', 'Start unhiding games')))
 			SKIN\Bang(('[!SetVariable "ContextTitleRemoveGamesStatus" "%s"]')\format(LOCALIZATION\get('main_context_title_start_removing_games', 'Start removing games')))
+			SKIN\Bang(('[!SetVariable "ContextTitleDetectGames" "%s"]')\format(LOCALIZATION\get('main_context_title_detect_games', 'Detect games')))
+			SKIN\Bang(('[!SetVariable "ContextTitleAddGame" "%s"]')\format(LOCALIZATION\get('main_context_title_add_game', 'Add a game')))
 			COMPONENTS.TOOLBAR = require('main.toolbar')(COMPONENTS.SETTINGS)
 			COMPONENTS.TOOLBAR\hide()
 			COMPONENTS.ANIMATIONS = require('main.animations')()
 			STATE.NUM_SLOTS = COMPONENTS.SETTINGS\getLayoutRows() * COMPONENTS.SETTINGS\getLayoutColumns()
 			COMPONENTS.SLOTS = require('main.slots')(COMPONENTS.SETTINGS)
-			COMPONENTS.LIBRARY = require('shared.library')(COMPONENTS.SETTINGS)
 			COMPONENTS.PROCESS = require('main.process')()
-			detectGames()
+			COMPONENTS.LIBRARY = require('shared.library')(COMPONENTS.SETTINGS)
+			detectPlatforms()
+			if COMPONENTS.LIBRARY\getDetectGames() == true
+				detectGames()
+			else
+				onInitialized()
 	)
 	COMPONENTS.STATUS\show(err, true) unless success
 
@@ -294,6 +311,8 @@ export GameProcessTerminated = (game) ->
 							COMPONENTS.SETTINGS\getBattlenetStoppingBangs()
 						when ENUMS.PLATFORM_IDS.GOG_GALAXY
 							COMPONENTS.SETTINGS\getGOGGalaxyStoppingBangs()
+						when ENUMS.PLATFORM_IDS.CUSTOM
+							COMPONENTS.SETTINGS\getCustomStoppingBangs()
 						else
 							assert(nil, 'Encountered an unsupported platform ID when executing platform-specific stopping bangs.')
 					SKIN\Bang(bang) for bang in *platformBangs
@@ -302,7 +321,10 @@ export GameProcessTerminated = (game) ->
 				when ENUMS.PLATFORM_IDS.GOG_GALAXY
 					if COMPONENTS.SETTINGS\getGOGGalaxyIndirectLaunch()
 						SKIN\Bang('["#@#windowless.vbs" "#@#main\\platforms\\gog_galaxy\\closeClient.bat"]')
-			SKIN\Bang('[!ShowFade]') if COMPONENTS.SETTINGS\getHideSkin()
+			if COMPONENTS.SETTINGS\getHideSkin()
+				SKIN\Bang('[!ShowFade]')
+			if COMPONENTS.SETTINGS\getShowSession()
+				SKIN\Bang(('[!DeactivateConfig "%s"]')\format(('%s\\Session')\format(STATE.ROOT_CONFIG)))
 	)
 	COMPONENTS.STATUS\show(err, true) unless success
 
@@ -318,6 +340,7 @@ export Unload = () ->
 	success, err = pcall(
 		() ->
 			log('Unloading skin')
+			COMPONENTS.LIBRARY\cleanUp()
 			COMPONENTS.LIBRARY\save()
 			COMPONENTS.SETTINGS\save()
 	)
@@ -468,6 +491,7 @@ export Sort = (sortingType) ->
 	success, err = pcall(
 		() ->
 			COMPONENTS.SETTINGS\setSorting(sortingType)
+			COMPONENTS.SETTINGS\save()
 			COMPONENTS.LIBRARY\sort(sortingType, STATE.GAMES)
 			STATE.SCROLL_INDEX = 1
 			updateSlots()
@@ -518,48 +542,53 @@ export Filter = (filterType, stack, arguments) ->
 
 -- Slots
 launchGame = (game) ->
-	if game\isInstalled() == true
-		game\setLastPlayed(os.time())
-		COMPONENTS.LIBRARY\sort(COMPONENTS.SETTINGS\getSorting())
-		COMPONENTS.LIBRARY\save()
-		STATE.GAMES = COMPONENTS.LIBRARY\get()
-		STATE.SCROLL_INDEX = 1
-		updateSlots()
-		COMPONENTS.PROCESS\monitor(game)
-		if COMPONENTS.SETTINGS\getBangsEnabled()
-			unless game\getIgnoresOtherBangs()
-				SKIN\Bang(bang) for bang in *COMPONENTS.SETTINGS\getGlobalStartingBangs()
-				platformBangs = switch game\getPlatformID()
-					when ENUMS.PLATFORM_IDS.SHORTCUTS
-						COMPONENTS.SETTINGS\getShortcutsStartingBangs()
-					when ENUMS.PLATFORM_IDS.STEAM, ENUMS.PLATFORM_IDS.STEAM_SHORTCUTS
-						COMPONENTS.SETTINGS\getSteamStartingBangs()
-					when ENUMS.PLATFORM_IDS.BATTLENET
-						COMPONENTS.SETTINGS\getBattlenetStartingBangs()
-					when ENUMS.PLATFORM_IDS.GOG_GALAXY
-						COMPONENTS.SETTINGS\getGOGGalaxyStartingBangs()
-					else
-						assert(nil, 'Encountered an unsupported platform ID when executing platform-specific starting bangs.')
-				SKIN\Bang(bang) for bang in *platformBangs
-			SKIN\Bang(bang) for bang in *game\getStartingBangs()
-		SKIN\Bang(('[%s]')\format(game\getPath()))
-		SKIN\Bang('[!HideFade]') if COMPONENTS.SETTINGS\getHideSkin()
-	elseif game\getPlatformID() == ENUMS.PLATFORM_IDS.STEAM
-		game\setLastPlayed(os.time())
-		game\setInstalled(true)
-		COMPONENTS.LIBRARY\sort(COMPONENTS.SETTINGS\getSorting())
-		COMPONENTS.LIBRARY\save()
-		STATE.GAMES = COMPONENTS.LIBRARY\get()
-		STATE.SCROLL_INDEX = 1
-		updateSlots()
-		SKIN\Bang(('[%s]')\format(game\getPath()))
+	game\setLastPlayed(os.time())
+	COMPONENTS.LIBRARY\sort(COMPONENTS.SETTINGS\getSorting())
+	COMPONENTS.LIBRARY\save()
+	STATE.GAMES = COMPONENTS.LIBRARY\get()
+	STATE.SCROLL_INDEX = 1
+	updateSlots()
+	COMPONENTS.PROCESS\monitor(game)
+	if COMPONENTS.SETTINGS\getBangsEnabled()
+		unless game\getIgnoresOtherBangs()
+			SKIN\Bang(bang) for bang in *COMPONENTS.SETTINGS\getGlobalStartingBangs()
+			platformBangs = switch game\getPlatformID()
+				when ENUMS.PLATFORM_IDS.SHORTCUTS
+					COMPONENTS.SETTINGS\getShortcutsStartingBangs()
+				when ENUMS.PLATFORM_IDS.STEAM, ENUMS.PLATFORM_IDS.STEAM_SHORTCUTS
+					COMPONENTS.SETTINGS\getSteamStartingBangs()
+				when ENUMS.PLATFORM_IDS.BATTLENET
+					COMPONENTS.SETTINGS\getBattlenetStartingBangs()
+				when ENUMS.PLATFORM_IDS.GOG_GALAXY
+					COMPONENTS.SETTINGS\getGOGGalaxyStartingBangs()
+				when ENUMS.PLATFORM_IDS.CUSTOM
+					COMPONENTS.SETTINGS\getCustomStartingBangs()
+				else
+					assert(nil, 'Encountered an unsupported platform ID when executing platform-specific starting bangs.')
+			SKIN\Bang(bang) for bang in *platformBangs
+		SKIN\Bang(bang) for bang in *game\getStartingBangs()
+	SKIN\Bang(('[%s]')\format(game\getPath()))
+	if COMPONENTS.SETTINGS\getHideSkin()
+		SKIN\Bang('[!HideFade]')
+	if COMPONENTS.SETTINGS\getShowSession()
+		SKIN\Bang(('[!ActivateConfig "%s"]')\format(('%s\\Session')\format(STATE.ROOT_CONFIG)))
+
+installGame = (game) ->
+	game\setLastPlayed(os.time())
+	game\setInstalled(true)
+	COMPONENTS.LIBRARY\sort(COMPONENTS.SETTINGS\getSorting())
+	COMPONENTS.LIBRARY\save()
+	STATE.GAMES = COMPONENTS.LIBRARY\get()
+	STATE.SCROLL_INDEX = 1
+	updateSlots()
+	SKIN\Bang(('[%s]')\format(game\getPath()))
 
 hideGame = (game) ->
 	return if game\isVisible() == false
 	game\setVisible(false)
 	COMPONENTS.LIBRARY\save()
 	i = table.find(STATE.GAMES, game)
-	table.remove(STATE.GAMES, i)
+	table.remove(STATE.GAMES, i) if i ~= nil
 	if #STATE.GAMES == 0
 		COMPONENTS.LIBRARY\filter(ENUMS.FILTER_TYPES.NONE)
 		STATE.GAMES = COMPONENTS.LIBRARY\get()
@@ -572,7 +601,7 @@ unhideGame = (game) ->
 	game\setVisible(true)
 	COMPONENTS.LIBRARY\save()
 	i = table.find(STATE.GAMES, game)
-	table.remove(STATE.GAMES, i)
+	table.remove(STATE.GAMES, i) if i ~= nil
 	if #STATE.GAMES == 0
 		COMPONENTS.LIBRARY\filter(ENUMS.FILTER_TYPES.NONE)
 		STATE.GAMES = COMPONENTS.LIBRARY\get()
@@ -581,11 +610,9 @@ unhideGame = (game) ->
 	updateSlots()
 
 removeGame = (game) ->
-	i = table.find(STATE.GAMES, game)
-	table.remove(STATE.GAMES, i)
 	COMPONENTS.LIBRARY\remove(game)
 	i = table.find(STATE.GAMES, game)
-	table.remove(STATE.GAMES, i)
+	table.remove(STATE.GAMES, i) if i ~= nil
 	if #STATE.GAMES == 0
 		COMPONENTS.LIBRARY\filter(ENUMS.FILTER_TYPES.NONE)
 		STATE.GAMES = COMPONENTS.LIBRARY\get()
@@ -602,12 +629,21 @@ export OnLeftClickSlot = (index) ->
 			game = COMPONENTS.SLOTS\leftClick(index)
 			return unless game
 			action = switch STATE.LEFT_CLICK_ACTION
-				when ENUMS.LEFT_CLICK_ACTIONS.LAUNCH_GAME then launchGame
+				when ENUMS.LEFT_CLICK_ACTIONS.LAUNCH_GAME
+					result = nil
+					if game\isInstalled() == true
+						result = launchGame
+					else
+						platformID = game\getPlatformID()
+						if platformID == ENUMS.PLATFORM_IDS.STEAM and game\getPlatformOverride() == nil
+							result = installGame
+					result
 				when ENUMS.LEFT_CLICK_ACTIONS.HIDE_GAME then hideGame
 				when ENUMS.LEFT_CLICK_ACTIONS.UNHIDE_GAME then unhideGame
 				when ENUMS.LEFT_CLICK_ACTIONS.REMOVE_GAME then removeGame
 				else
 					assert(nil, 'main.init.OnLeftClickSlot')
+			return unless action
 			animationType = COMPONENTS.SETTINGS\getSlotsClickAnimation()
 			unless COMPONENTS.ANIMATIONS\pushSlotClick(index, animationType, action, game)
 				action(game)
@@ -624,11 +660,11 @@ export OnMiddleClickSlot = (index) ->
 			game = COMPONENTS.SLOTS\middleClick(index)
 			return if game == nil
 			configName = ('%s\\Game')\format(STATE.ROOT_CONFIG)
-			if STATE.GAME_BEING_MODIFIED ~= nil and game == STATE.GAME_BEING_MODIFIED
+			config = utility.getConfig(configName)
+			if STATE.GAME_BEING_MODIFIED == game and config\isActive()
 				STATE.GAME_BEING_MODIFIED = nil
 				return SKIN\Bang(('[!DeactivateConfig "%s"]')\format(configName))
 			STATE.GAME_BEING_MODIFIED = game
-			config = utility.getConfig(configName)
 			if config == nil or not config\isActive()
 				SKIN\Bang(('[!ActivateConfig "%s"]')\format(configName))
 			else
@@ -642,7 +678,6 @@ export HandshakeGame = () ->
 		() ->
 			log('HandshakeGame')
 			gameID = STATE.GAME_BEING_MODIFIED\getGameID()
-			STATE.GAME_BEING_MODIFIED = nil
 			assert(gameID ~= nil, 'main.init.HandshakeGame')
 			SKIN\Bang(('[!CommandMeasure "Script" "Handshake(%d)" "#ROOTCONFIG#\\Game"]')\format(gameID))
 	)
@@ -652,19 +687,9 @@ export UpdateGame = (gameID) ->
 	return unless STATE.INITIALIZED
 	success, err = pcall(
 		() ->
-			log('UpdateGame')
-			if gameID ~= nil
-				games = io.readJSON(STATE.PATHS.GAMES)
-				games = games.games
-				game = games[gameID] -- gameID should also be the index of the game since the games table in games.json should be sorted according to the gameIDs.
-				if game == nil or game.gameID ~= gameID
-					game = nil
-					for args in *games
-						if args.gameID == gameID
-							game = args
-							break
-				assert(game ~= nil, 'main.init.UpdateGame')
-				COMPONENTS.LIBRARY\update(Game(game))
+			log('UpdateGame', gameID)
+			COMPONENTS.LIBRARY\update(gameID)
+			STATE.SCROLL_INDEX_UPDATED = false
 	)
 	COMPONENTS.STATUS\show(err, true) unless success
 
@@ -712,7 +737,7 @@ export OnFinishedDetectingPlatformGames = () ->
 			platform = table.remove(STATE.PLATFORM_QUEUE, 1)
 			games = platform\getGames()
 			log(('Found %d %s games')\format(#games, platform\getName()))
-			COMPONENTS.LIBRARY\add(games)
+			games = COMPONENTS.LIBRARY\extend(games)
 			for game in *games
 				if game\getBannerURL() ~= nil
 					if game\getBanner() == nil
@@ -806,6 +831,16 @@ export OnIdentifiedBattlenetFolders = () ->
 	COMPONENTS.STATUS\show(err, true) unless success
 
 -- Game detection -> GOG Galaxy
+export OnDownloadedGOGCommunityProfile = () ->
+	success, err = pcall(
+		() ->
+			unless STATE.PLATFORM_QUEUE[1]\hasdownloadedCommunityProfile()
+				return utility.runLastCommand()
+			log('Downloaded GOG community profile')
+			utility.runCommand(STATE.PLATFORM_QUEUE[1]\dumpDatabases())
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
 export OnDumpedDBs = () ->
 	success, err = pcall(
 		() ->
@@ -814,8 +849,23 @@ export OnDumpedDBs = () ->
 			log('Dumped GOG Galaxy databases')
 			cachePath = STATE.PLATFORM_QUEUE[1]\getCachePath()
 			index = io.readFile(io.joinPaths(cachePath, 'index.txt'))
-			galaxy = io.readFile(io.joinPaths(cachePath, 'galaxy.txt'))
-			STATE.PLATFORM_QUEUE[1]\generateGames(index, galaxy)
+			galaxyPath = io.joinPaths(cachePath, 'galaxy.txt')
+			galaxy = io.readFile(galaxyPath)
+			newGalaxy = {}
+			wholeLine = {}
+			lines = galaxy\splitIntoLines()
+			for line in *lines
+				if line\match('^%d+|[^|]+|[^|]+|.+$')
+					table.insert(newGalaxy, table.concat(wholeLine, ''))
+					wholeLine = {}
+				table.insert(wholeLine, line)
+			if #wholeLine > 0
+				table.insert(newGalaxy, table.concat(wholeLine, ''))
+			galaxy = table.concat(newGalaxy, '\n')
+			io.writeFile(galaxyPath, galaxy)
+			profilePath = io.joinPaths(cachePath, 'profile.txt')
+			profile = if io.fileExists(profilePath) then io.readFile(profilePath) else nil
+			STATE.PLATFORM_QUEUE[1]\generateGames(index, galaxy, profile)
 			OnFinishedDetectingPlatformGames()
 	)
 	COMPONENTS.STATUS\show(err, true) unless success
@@ -855,6 +905,61 @@ export OnFinishedDownloadingBanners = () ->
 			onInitialized()
 	)
 	COMPONENTS.STATUS\show(err, true) unless success
+
+getPlatformByGame = (game) ->
+	platforms = [Platform(COMPONENTS.SETTINGS) for Platform in *require('main.platforms')]
+	platformID = game\getPlatformID()
+	for platform in *platforms
+		if platform\getPlatformID() == platformID
+			return platform
+	log("Failed to get platform based on the game", platformID)
+	return nil
+
+export ReacquireBanner = (gameID) ->
+	success, err = pcall(
+		() ->
+			log('ReacquireBanner', gameID)
+			game = COMPONENTS.LIBRARY\getGameByID(gameID)
+			assert(game ~= nil, 'main.init.OnReacquireBanner')
+			log('Reacquiring a banner for', game\getTitle())
+			platform = getPlatformByGame(game)
+			assert(platform ~= nil, 'main.init.ReacquireBanner')
+			url = platform\getBannerURL(game)
+			if url == nil
+				log("Failed to get URL for banner reacquisition", gameID)
+				return
+			STATE.BANNER_QUEUE = {game}
+			bannerPath = game\getBanner()\reverse()\match('^([^%.]+%.[^\\]+)')\reverse()
+			downloadFile(url, bannerPath, 'OnBannerReacquisitionFinished', 'OnBannerReacquisitionError')
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export OnBannerReacquisitionFinished = () ->
+	success, err = pcall(
+		() ->
+			log('Successfully reacquired a banner')
+			game = STATE.BANNER_QUEUE[1]
+			STATE.BANNER_QUEUE = nil
+			downloadedPath = io.joinPaths(STATE.PATHS.DOWNLOADFILE, SKIN\GetMeasure('Downloader')\GetOption('DownloadFile'))
+			bannerPath = io.joinPaths(STATE.PATHS.RESOURCES, game\getBanner())
+			os.remove(bannerPath)
+			os.rename(downloadedPath, bannerPath)
+			stopDownloader()
+			STATE.SCROLL_INDEX_UPDATED = false
+			SKIN\Bang('[!UpdateMeasure "Script"]')
+			SKIN\Bang('[!CommandMeasure "Script" "OnReacquiredBanner()" "#ROOTCONFIG#\\Game"]')
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export OnBannerReacquisitionError = () ->
+	success, err = pcall(
+		() ->
+			log('Failed to reacquire a banner')
+			STATE.BANNER_QUEUE = nil
+			stopDownloader()
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
 
 -- Context title action
 export ToggleHideGames = () ->
@@ -937,4 +1042,47 @@ export ToggleRemoveGames = () ->
 			SKIN\Bang(('[!SetVariable "ContextTitleRemoveGamesStatus" "%s"]')\format(LOCALIZATION\get('main_context_title_stop_removing_games', 'Stop removing games')))
 			STATE.LEFT_CLICK_ACTION = ENUMS.LEFT_CLICK_ACTIONS.REMOVE_GAME
 	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export TriggerGameDetection = () ->
+	success, err = pcall(
+		() ->
+			games = io.readJSON(STATE.PATHS.GAMES)
+			games.updated = nil
+			io.writeJSON(STATE.PATHS.GAMES, games)
+			SKIN\Bang("[!Refresh]")
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export OpenStorePage = (gameID) ->
+	success, err = pcall(
+		() ->
+			game = COMPONENTS.LIBRARY\getGameByID(gameID)
+			assert(game ~= nil, 'main.init.OpenStorePage')
+			platform = getPlatformByGame(game)
+			assert(platform ~= nil, 'main.init.OpenStorePage')
+			url = platform\getStorePageURL(game)
+			if url == nil
+				log("Failed to get URL for opening the store page", gameID)
+				return
+			SKIN\Bang(('[%s]')\format(url))
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export StartAddingGame = () ->
+	success, err = pcall(
+		() ->
+			SKIN\Bang('[!ActivateConfig "#ROOTCONFIG#\\NewGame"]')
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export HandshakeNewGame = () ->
+	success, err = pcall(
+		() ->
+			SKIN\Bang(('[!CommandMeasure "Script" "Handshake(%d)" "#ROOTCONFIG#\\NewGame"]')\format(COMPONENTS.LIBRARY\getNextAvailableGameID()))
+	)
+	COMPONENTS.STATUS\show(err, true) unless success
+
+export OnAddGame = (gameID) ->
+	success, err = pcall(() -> COMPONENTS.LIBRARY\add(gameID))
 	COMPONENTS.STATUS\show(err, true) unless success

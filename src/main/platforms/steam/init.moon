@@ -2,7 +2,6 @@ utility = require('shared.utility')
 bit = require('lib.bit.numberlua')
 digest = require('lib.digest.crc32')
 Platform = require('main.platforms.platform')
-Game = require('main.game')
 
 -- Regular Steam games
 -- Optional: Parse the Steam community profile, which must be set to public, to get a list of all Steam games (AppIDs, titles, and hours played) associated with the chosen account.
@@ -31,7 +30,7 @@ class Steam extends Platform
 		@name = "Steam"
 		@platform = 'steam'
 		@platformID = ENUMS.PLATFORM_IDS.STEAM
-		@platformProcess = 'Steam.exe'
+		@platformProcess = 'steam.exe'
 		@cachePath = 'cache\\steam\\'
 		@enabled = settings\getSteamEnabled()
 		@steamPath = settings\getSteamPath()
@@ -156,8 +155,13 @@ class Steam extends Platform
 			if type(vdf.libraryfolders) == 'table'
 				for key, value in pairs(vdf.libraryfolders)
 					if tonumber(key) ~= nil
-						value ..= '\\' if value\endsWith('\\')
-						table.insert(libraries, io.joinPaths((value\gsub('\\\\', '\\')), 'steamapps\\'))
+						if type(value) == 'table'
+							if value.path
+								value.path ..= '\\' if value.path\endsWith('\\')
+								table.insert(libraries, io.joinPaths((value.path\gsub('\\\\', '\\')), 'steamapps\\'))
+						else
+							value ..= '\\' if value\endsWith('\\')
+							table.insert(libraries, io.joinPaths((value\gsub('\\\\', '\\')), 'steamapps\\'))
 			else
 				log('\\Steam\\steamapps\\libraryfolders.vdf does not contain a table called "libraryfolders".')
 		else
@@ -246,6 +250,9 @@ class Steam extends Platform
 		lastPlayed = tonumber(app.lastplayed)
 		return lastPlayed
 
+	generateBannerURL: (appID) =>
+		return ('http://cdn.akamai.steamstatic.com/steam/apps/%s/header.jpg')\format(appID)
+
 	getBanner: (appID) =>
 		banner = @getBannerPath(appID)
 		return banner, nil if banner -- Found an existing copy in the skin's cache
@@ -256,7 +263,7 @@ class Steam extends Platform
 				io.copyFile(gridBannerPath, cacheBannerPath, false)
 				return cacheBannerPath, nil -- Found a custom banner that was assigned via Steam's grid view
 		banner = io.joinPaths(@cachePath, appID .. '.jpg')
-		bannerURL = ('http://cdn.akamai.steamstatic.com/steam/apps/%s/header.jpg')\format(appID)
+		bannerURL = @generateBannerURL(appID)
 		return banner, bannerURL -- Download the game's banner
 
 	getPath: (appID) => return ('steam://rungameid/%s')\format(appID)
@@ -315,7 +322,7 @@ class Steam extends Platform
 				platformID: @platformID
 			})
 		for args in *games
-			table.insert(@games, Game(args))
+			table.insert(@games, args)
 
 	generateGames: () =>
 		@localConfig = @parseLocalConfig() if @localConfig == nil
@@ -394,7 +401,21 @@ class Steam extends Platform
 				}
 				@communityProfileGames[appID] = nil
 		for appID, args in pairs(games)
-			table.insert(@games, Game(args))
+			table.insert(@games, args)
+
+	getStorePageURL: (game) =>
+		assert(game ~= nil and game\getPlatformID() == @platformID, 'main.platforms.steam.init.getStorePageURL')
+		if game\getPlatformOverride() == nil
+			appID = game\getBanner()\reverse()\match('^[^%.]+%.([^\\]+)')\reverse()
+			return ('https://store.steampowered.com/app/%s')\format(appID)
+		return nil
+
+	getBannerURL: (game) =>
+		assert(game ~= nil and game\getPlatformID() == @platformID, 'main.platforms.steam.init.getBannerURL')
+		if game\getPlatformOverride() == nil
+			appID = game\getBanner()\reverse()\match('^[^%.]+%.([^\\]+)')\reverse()
+			return @generateBannerURL(appID)
+		return nil
 
 if RUN_TESTS
 	assertionMessage = 'Steam test failed!'
@@ -418,7 +439,7 @@ if RUN_TESTS
 
 	assert(steam\generateAppID('Whatevs', '"Y:\\Program Files (32)\\SomeGame\\game.exe"') == '17882896429207257088', assertionMessage)
 	assert(steam\generateAppID('Spelunky Classic', '"D:\\Games\\GOG\\Spelunky Classic\\Spelunky.exe"') == '15292025676400427008', assertionMessage)
-	
+
 	profile = 'Some kind of header or other junk that we are not interested in...
 <game>
 	<appID>40400</appID>

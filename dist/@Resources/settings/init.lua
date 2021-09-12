@@ -8,7 +8,8 @@ STATE = {
   INITIALIZED = false,
   PATHS = {
     RESOURCES = nil,
-    RAINMETER = nil
+    RAINMETER = nil,
+    GAMES = 'games.json'
   },
   CURRENT_CONFIG = nil,
   NUM_SLOTS = 4,
@@ -21,10 +22,8 @@ COMPONENTS = {
   SLOTS = nil,
   PAGES = nil
 }
-log = function(...)
-  if STATE.LOGGING == true then
-    return print(...)
-  end
+HideStatus = function()
+  return COMPONENTS.STATUS:hide()
 end
 RebuildSettingsSlots = function()
   if not (STATE.INITIALIZED) then
@@ -66,7 +65,8 @@ additionalEnums = function()
     SPINNER = 4,
     INTEGER = 5,
     FOLDER_PATH_SPINNER = 6,
-    MAX = 7
+    STRING = 7,
+    MAX = 8
   }
 end
 Initialize = function()
@@ -81,6 +81,13 @@ Initialize = function()
     utility = require('shared.utility')
     utility.createJSONHelpers()
     COMPONENTS.SETTINGS = require('shared.settings')()
+    if COMPONENTS.SETTINGS:getLogging() == true then
+      log = function(...)
+        return print(...)
+      end
+    else
+      log = function() end
+    end
     COMPONENTS.OLD_SETTINGS = require('shared.settings')()
     LOCALIZATION = require('shared.localization')(COMPONENTS.SETTINGS)
     COMPONENTS.STATUS:show(LOCALIZATION:get('status_initializing', 'Initializing'))
@@ -149,6 +156,37 @@ requiresRebuilding = function()
   end
   return false
 end
+local requiresGameDetection
+requiresGameDetection = function()
+  if COMPONENTS.SETTINGS:getShortcutsEnabled() ~= COMPONENTS.OLD_SETTINGS:getShortcutsEnabled() then
+    return true
+  elseif COMPONENTS.SETTINGS:getSteamEnabled() ~= COMPONENTS.OLD_SETTINGS:getSteamEnabled() then
+    return true
+  elseif COMPONENTS.SETTINGS:getBattlenetEnabled() ~= COMPONENTS.OLD_SETTINGS:getBattlenetEnabled() then
+    return true
+  elseif COMPONENTS.SETTINGS:getGOGGalaxyEnabled() ~= COMPONENTS.OLD_SETTINGS:getGOGGalaxyEnabled() then
+    return true
+  elseif COMPONENTS.SETTINGS:getSteamPath() ~= COMPONENTS.OLD_SETTINGS:getSteamPath() then
+    return true
+  elseif #COMPONENTS.SETTINGS:getBattlenetPaths() ~= #COMPONENTS.OLD_SETTINGS:getBattlenetPaths() then
+    return true
+  elseif #COMPONENTS.SETTINGS:getBattlenetPaths() == #COMPONENTS.OLD_SETTINGS:getBattlenetPaths() then
+    local newBattlenetPaths = COMPONENTS.SETTINGS:getBattlenetPaths()
+    local oldBattlenetPaths = COMPONENTS.OLD_SETTINGS:getBattlenetPaths()
+    for _index_0 = 1, #newBattlenetPaths do
+      local path = newBattlenetPaths[_index_0]
+      local index = table.find(oldBattlenetPaths, path)
+      if index ~= nil then
+        table.remove(oldBattlenetPaths, index)
+      else
+        return true
+      end
+    end
+  elseif COMPONENTS.SETTINGS:getGOGGalaxyClientPath() ~= COMPONENTS.OLD_SETTINGS:getGOGGalaxyClientPath() then
+    return true
+  end
+  return false
+end
 Close = function()
   if not (STATE.INITIALIZED) then
     return 
@@ -157,6 +195,13 @@ Close = function()
     if COMPONENTS.SETTINGS:hasChanged(COMPONENTS.OLD_SETTINGS:get()) then
       if requiresRebuilding() then
         RebuildMainSlots()
+      end
+      if requiresGameDetection() then
+        if io.fileExists(STATE.PATHS.GAMES) then
+          local games = io.readJSON(STATE.PATHS.GAMES)
+          games.updated = nil
+          io.writeJSON(STATE.PATHS.GAMES, games)
+        end
       end
       local mainConfig = utility.getConfig(SKIN:GetVariable('ROOTCONFIG'))
       if mainConfig ~= nil and mainConfig:isActive() then
@@ -241,11 +286,28 @@ EditFolderPath = function(index, path)
   end
   return COMPONENTS.SLOTS:editFolderPath(index, path)
 end
+StartEditingString = function(index)
+  local valueMeter = SKIN:GetMeter(('Slot%dStringValue'):format(index))
+  SKIN:Bang(('[!SetOption "StringInput" "DefaultValue" "%s"]'):format(valueMeter:GetOption('Text')))
+  SKIN:Bang(('[!SetOption "StringInput" "X" "([Slot%dStringValue:X])"]'):format(index))
+  SKIN:Bang(('[!SetOption "StringInput" "Y" "([Slot%dStringValue:Y] + 18)"]'):format(index))
+  SKIN:Bang(('[!SetOption "StringInput" "W" "([Slot%dStringValue:W])"]'):format(index))
+  SKIN:Bang('[!SetOption "StringInput" "H" "32"]')
+  SKIN:Bang(('[!SetOption "StringInput" "SolidColor" "%s"]'):format(valueMeter:GetOption('SolidColor')))
+  SKIN:Bang(('[!CommandMeasure "StringInput" "ExecuteBatch %d"]'):format(index))
+  return log('StartEditingString ' .. index)
+end
+EditString = function(index, value)
+  if value:endsWith(';') then
+    value = value:sub(1, -2)
+  end
+  return COMPONENTS.SLOTS:editString(index, value)
+end
 OnLanguagesListed = function()
   if not (io.fileExists('cache\\languages.txt')) then
     return utility.runLastCommand()
   end
-  local setting = COMPONENTS.SLOTS:getSetting(COMPONENTS.SLOTS:getNumSettings() - 2)
+  local setting = COMPONENTS.SLOTS:getSetting(COMPONENTS.SLOTS:getNumSettings() - 3)
   setting:setValues()
   COMPONENTS.SLOTS:scroll()
   return COMPONENTS.STATUS:hide()
@@ -284,45 +346,57 @@ EditInteger = function(index, value)
   end
   return COMPONENTS.SLOTS:setInteger(index, value)
 end
+local readBangs
+readBangs = function()
+  return io.readFile('cache\\bangs.txt')
+end
 OnEditedGlobalStartingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setGlobalStartingBangs(bangs:splitIntoLines())
 end
 OnEditedGlobalStoppingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setGlobalStoppingBangs(bangs:splitIntoLines())
 end
 OnEditedShortcutsStartingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setShortcutsStartingBangs(bangs:splitIntoLines())
 end
 OnEditedShortcutsStoppingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setShortcutsStoppingBangs(bangs:splitIntoLines())
 end
 OnEditedSteamStartingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setSteamStartingBangs(bangs:splitIntoLines())
 end
 OnEditedSteamStoppingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setSteamStoppingBangs(bangs:splitIntoLines())
 end
 OnEditedBattlenetStartingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setBattlenetStartingBangs(bangs:splitIntoLines())
 end
 OnEditedBattlenetStoppingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setBattlenetStoppingBangs(bangs:splitIntoLines())
 end
 OnEditedGOGGalaxyStartingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setGOGGalaxyStartingBangs(bangs:splitIntoLines())
 end
 OnEditedGOGGalaxyStoppingBangs = function()
-  local bangs = io.readFile('cache\\bangs.txt')
+  local bangs = readBangs()
   return COMPONENTS.SETTINGS:setGOGGalaxyStoppingBangs(bangs:splitIntoLines())
+end
+OnEditedCustomStartingBangs = function()
+  local bangs = readBangs()
+  return COMPONENTS.SETTINGS:setCustomStartingBangs(bangs:splitIntoLines())
+end
+OnEditedCustomStoppingBangs = function()
+  local bangs = readBangs()
+  return COMPONENTS.SETTINGS:setCustomStoppingBangs(bangs:splitIntoLines())
 end
 CycleFolderPathSpinner = function(index, direction)
   return COMPONENTS.SLOTS:cycleFolderPathSpinner(index, direction)

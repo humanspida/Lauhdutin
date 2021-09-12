@@ -21,6 +21,6 @@ if exist %1 (
 ) else (
 	start /B "" %sqlite% %2 "select productId, installationPath from InstalledBaseProducts;" > %index%
 )
-start /B "" %sqlite% %2 "select productId, title, images from LimitedDetails;" > %galaxy%
+start /B "" %sqlite% %2 "select productId, title, images, links from LimitedDetails;" > %galaxy%
 echo "" > %completed%
 ::pause

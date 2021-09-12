@@ -153,6 +153,26 @@ local migrators = {
       settings.steam_personaname = nil
       settings.show_platform = nil
     end
+  },
+  {
+    version = 2,
+    func = function(settings)
+      settings.gameDetectionFrequency = ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY
+      settings.slots.overlayUpperText = ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE
+      settings.slots.overlayLowerText = ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES
+      settings.slots.overlayImagesEnabled = true
+      settings.showSession = false
+      settings.search = { }
+      settings.search.uninstalledGamesEnabled = false
+      settings.search.hiddenGamesEnabled = false
+      settings.platforms.custom = { }
+      settings.platforms.custom.bangs = {
+        starting = { },
+        stopping = { }
+      }
+      settings.platforms.gogGalaxy.useCommunityProfile = false
+      settings.platforms.gogGalaxy.profileName = nil
+    end
   }
 }
 local Settings
@@ -242,7 +262,7 @@ do
       return self.settings.numberOfBackups or 5
     end,
     setNumberOfBackups = function(self, value)
-      if value < 0 then
+      if value < 1 then
         return 
       end
       self.settings.numberOfBackups = value
@@ -260,10 +280,25 @@ do
       return self.settings.sorting or ENUMS.SORTING_TYPES.ALPHABETICALLY
     end,
     setSorting = function(self, value)
-      if value < 1 then
+      if value < ENUMS.SORTING_TYPES.ALPHABETICALLY or value >= ENUMS.SORTING_TYPES.MAX then
         return 
       end
       self.settings.sorting = value
+    end,
+    getGameDetectionFrequency = function(self)
+      return self.settings.gameDetectionFrequency or ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY
+    end,
+    setGameDetectionFrequency = function(self, value)
+      if value < ENUMS.GAME_DETECTION_FREQUENCY.NEVER or value >= ENUMS.GAME_DETECTION_FREQUENCY.MAX then
+        return 
+      end
+      self.settings.gameDetectionFrequency = value
+    end,
+    getShowSession = function(self)
+      return self.settings.showSession
+    end,
+    toggleShowSession = function(self)
+      self.settings.showSession = not self.settings.showSession
     end,
     getLocalization = function(self)
       return self.settings.localization or 'English'
@@ -307,6 +342,18 @@ do
         end
       end
       self.settings.bangs.global.stopping = bangs
+    end,
+    getSearchUninstalledGamesEnabled = function(self)
+      return self.settings.search.uninstalledGamesEnabled or false
+    end,
+    toggleSearchUninstalledGamesEnabled = function(self)
+      self.settings.search.uninstalledGamesEnabled = not self.settings.search.uninstalledGamesEnabled
+    end,
+    getSearchHiddenGamesEnabled = function(self)
+      return self.settings.search.hiddenGamesEnabled or false
+    end,
+    toggleSearchHiddenGamesEnabled = function(self)
+      self.settings.search.hiddenGamesEnabled = not self.settings.search.hiddenGamesEnabled
     end,
     getLayoutRows = function(self)
       return self.settings.layout.rows or 1
@@ -424,6 +471,33 @@ do
     end,
     toggleSlotsOverlayEnabled = function(self)
       self.settings.slots.overlayEnabled = not self.settings.slots.overlayEnabled
+    end,
+    getSlotsOverlayUpperText = function(self)
+      return self.settings.slots.overlayUpperText or ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE
+    end,
+    setSlotsOverlayUpperText = function(self, value)
+      if value < ENUMS.OVERLAY_SLOT_TEXT.NONE or value >= ENUMS.OVERLAY_SLOT_TEXT.MAX then
+        return 
+      end
+      self.settings.slots.overlayUpperText = value
+    end,
+    getSlotsOverlayLowerText = function(self)
+      return self.settings.slots.overlayLowerText or ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES
+    end,
+    setSlotsOverlayLowerText = function(self, value)
+      if value < ENUMS.OVERLAY_SLOT_TEXT.NONE or value >= ENUMS.OVERLAY_SLOT_TEXT.MAX then
+        return 
+      end
+      self.settings.slots.overlayLowerText = value
+    end,
+    getSlotsOverlayImagesEnabled = function(self)
+      if self.settings.slots.overlayImagesEnabled ~= nil then
+        return self.settings.slots.overlayImagesEnabled
+      end
+      return false
+    end,
+    toggleSlotsOverlayImagesEnabled = function(self)
+      self.settings.slots.overlayImagesEnabled = not self.settings.slots.overlayImagesEnabled
     end,
     getSlotsHoverAnimation = function(self)
       return self.settings.slots.hoverAnimation or ENUMS.SLOT_HOVER_ANIMATIONS.ZOOM_IN
@@ -636,6 +710,27 @@ do
     toggleGOGGalaxyIndirectLaunch = function(self)
       self.settings.platforms.gogGalaxy.indirectLaunch = not self.settings.platforms.gogGalaxy.indirectLaunch
     end,
+    getGOGGalaxyParseCommunityProfile = function(self)
+      return self.settings.platforms.gogGalaxy.useCommunityProfile or false
+    end,
+    toggleGOGGalaxyParseCommunityProfile = function(self)
+      self.settings.platforms.gogGalaxy.useCommunityProfile = not self.settings.platforms.gogGalaxy.useCommunityProfile
+    end,
+    getGOGGalaxyProfileName = function(self)
+      return self.settings.platforms.gogGalaxy.profileName or nil
+    end,
+    setGOGGalaxyProfileName = function(self, value)
+      if value == nil then
+        return false
+      end
+      value = value:trim()
+      if value == '' then
+        self.settings.platforms.gogGalaxy.profileName = nil
+      else
+        self.settings.platforms.gogGalaxy.profileName = value
+      end
+      return true
+    end,
     getGOGGalaxyStartingBangs = function(self)
       return self.settings.platforms.gogGalaxy.bangs.starting or { }
     end,
@@ -663,23 +758,57 @@ do
         end
       end
       self.settings.platforms.gogGalaxy.bangs.stopping = bangs
+    end,
+    getCustomStartingBangs = function(self)
+      return self.settings.platforms.custom.bangs.starting or { }
+    end,
+    setCustomStartingBangs = function(self, tbl)
+      local bangs = { }
+      for _index_0 = 1, #tbl do
+        local bang = tbl[_index_0]
+        bang = bang:trim()
+        if bang ~= '' then
+          table.insert(bangs, bang)
+        end
+      end
+      self.settings.platforms.custom.bangs.starting = bangs
+    end,
+    getCustomStoppingBangs = function(self)
+      return self.settings.platforms.custom.bangs.stopping or { }
+    end,
+    setCustomStoppingBangs = function(self, tbl)
+      local bangs = { }
+      for _index_0 = 1, #tbl do
+        local bang = tbl[_index_0]
+        bang = bang:trim()
+        if bang ~= '' then
+          table.insert(bangs, bang)
+        end
+      end
+      self.settings.platforms.custom.bangs.stopping = bangs
     end
   }
   _base_0.__index = _base_0
   _class_0 = setmetatable({
     __init = function(self)
-      self.version = 1
+      self.version = 2
       self.path = 'settings.json'
       self.defaultSettings = {
         numberOfBackups = 5,
         logging = false,
         sorting = ENUMS.SORTING_TYPES.ALPHABETICALLY,
+        gameDetectionFrequency = ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY,
+        showSession = false,
         bangs = {
           enabled = true,
           global = {
             starting = { },
             stopping = { }
           }
+        },
+        search = {
+          uninstalledGamesEnabled = false,
+          hiddenGamesEnabled = false
         },
         layout = {
           rows = 1,
@@ -699,6 +828,9 @@ do
         slots = {
           doubleClickToLaunch = false,
           overlayEnabled = true,
+          overlayUpperText = ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE,
+          overlayLowerText = ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES,
+          overlayImagesEnabled = true,
           hoverAnimation = ENUMS.SLOT_HOVER_ANIMATIONS.ZOOM_IN,
           clickAnimation = ENUMS.SLOT_CLICK_ANIMATIONS.SHRINK
         },
@@ -738,7 +870,9 @@ do
             },
             clientPath = '',
             programDataPath = 'C:\\ProgramData\\GOG.com\\Galaxy',
-            indirectLaunch = false
+            indirectLaunch = false,
+            useCommunityProfile = false,
+            profileName = nil
           }
         }
       }

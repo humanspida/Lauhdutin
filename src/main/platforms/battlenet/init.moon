@@ -1,5 +1,4 @@
 Platform = require('main.platforms.platform')
-Game = require('main.game')
 
 -- Dump a list of folders in one of the paths.
 -- Parse the list of folders and see if any of the names match with one of the pre-defined sets of arguments.
@@ -30,6 +29,13 @@ class Battlenet extends Platform
 		SKIN\Bang(('["#@#windowless.vbs" "#@#main\\platforms\\battlenet\\identifyFolders.bat" "%s"]')\format(@battlenetPaths[1]))
 		return @getWaitCommand(), '', 'OnIdentifiedBattlenetFolders'
 
+	getBanner: (title, bannerURL) =>
+		banner = @getBannerPath(title)
+		unless banner
+			if bannerURL
+				banner = io.joinPaths(@cachePath, title .. bannerURL\reverse()\match('^([^%.]+%.)')\reverse())
+		return banner
+
 	generateGames: (output) =>
 		assert(type(output) == 'string')
 		table.remove(@battlenetPaths, 1)
@@ -46,48 +52,56 @@ class Battlenet extends Platform
 						title: 'Destiny 2'
 						path: 'DST2'
 						process: 'destiny2.exe' -- No 32-bit executable
+						--bannerURL: ''
 					}
 				when 'diablo iii'
 					args = {
 						title: 'Diablo III'
 						path: 'D3'
 						process: if bits == 64 then 'Diablo III64.exe' else 'Diablo III.exe'
+						--bannerURL: ''
 					}
 				when 'hearthstone'
 					args = {
 						title: 'Hearthstone'
 						path: 'WTCG'
 						process: 'Hearthstone.exe' -- No 64-bit executable
+						--bannerURL: ''
 					}
 				when 'heroes of the storm'
 					args = {
 						title: 'Heroes of the Storm'
 						path: 'Hero'
 						process: if bits == 64 then 'HeroesOfTheStorm_x64.exe' else 'HeroesOfTheStorm.exe'
+						--bannerURL: ''
 					}
 				when 'overwatch'
 					args = {
 						title: 'Overwatch'
 						path: 'Pro'
 						process: 'Overwatch.exe' -- No 32-bit executable
+						--bannerURL: ''
 					}
 				when 'starcraft'
 					args = {
 						title: 'StarCraft'
 						path: 'S1'
 						process: 'StarCraft.exe' -- No 64-bit executable
+						--bannerURL: ''
 					}
 				when 'starcraft ii'
 					args = {
 						title: 'StarCraft II'
 						path: 'S2'
 						process: if bits == 64 then 'SC2_x64.exe' else 'SC2.exe'
+						--bannerURL: ''
 					}
 				when 'world of warcraft'
 					args = {
 						title: 'World of Warcraft'
 						path: 'WoW'
 						process: if bits == 64 then 'Wow-64.exe' else 'Wow.exe'
+						--bannerURL: ''
 					}
 				else
 					continue
@@ -98,13 +112,13 @@ class Battlenet extends Platform
 				log('Skipping Blizzard Battle.net game because the path is missing')
 				continue
 			args.path = ('"%s" --exec="launch %s"')\format(@clientPath, args.path)
-			args.banner = @getBannerPath(args.title)
+			args.banner = @getBanner(args.title, args.bannerURL)
 			unless args.banner
 				args.expectedBanner = args.title
 			args.platformID = @platformID
 			table.insert(games, args)
 		for args in *games
-			table.insert(@games, Game(args))
+			table.insert(@games, args)
 
 if RUN_TESTS
 	assertionMessage = 'Blizzard Battle.net test failed!'

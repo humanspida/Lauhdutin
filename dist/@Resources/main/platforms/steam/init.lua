@@ -2,7 +2,6 @@ local utility = require('shared.utility')
 local bit = require('lib.bit.numberlua')
 local digest = require('lib.digest.crc32')
 local Platform = require('main.platforms.platform')
-local Game = require('main.game')
 local lookupTable
 do
   local _accum_0 = { }
@@ -186,10 +185,19 @@ do
         if type(vdf.libraryfolders) == 'table' then
           for key, value in pairs(vdf.libraryfolders) do
             if tonumber(key) ~= nil then
-              if value:endsWith('\\') then
-                value = value .. '\\'
+              if type(value) == 'table' then
+                if value.path then
+                  if value.path:endsWith('\\') then
+                    value.path = value.path .. '\\'
+                  end
+                  table.insert(libraries, io.joinPaths((value.path:gsub('\\\\', '\\')), 'steamapps\\'))
+                end
+              else
+                if value:endsWith('\\') then
+                  value = value .. '\\'
+                end
+                table.insert(libraries, io.joinPaths((value:gsub('\\\\', '\\')), 'steamapps\\'))
               end
-              table.insert(libraries, io.joinPaths((value:gsub('\\\\', '\\')), 'steamapps\\'))
             end
           end
         else
@@ -309,6 +317,9 @@ do
       lastPlayed = tonumber(app.lastplayed)
       return lastPlayed
     end,
+    generateBannerURL = function(self, appID)
+      return ('http://cdn.akamai.steamstatic.com/steam/apps/%s/header.jpg'):format(appID)
+    end,
     getBanner = function(self, appID)
       local banner = self:getBannerPath(appID)
       if banner then
@@ -325,7 +336,7 @@ do
         end
       end
       banner = io.joinPaths(self.cachePath, appID .. '.jpg')
-      local bannerURL = ('http://cdn.akamai.steamstatic.com/steam/apps/%s/header.jpg'):format(appID)
+      local bannerURL = self:generateBannerURL(appID)
       return banner, bannerURL
     end,
     getPath = function(self, appID)
@@ -418,7 +429,7 @@ do
       end
       for _index_0 = 1, #games do
         local args = games[_index_0]
-        table.insert(self.games, Game(args))
+        table.insert(self.games, args)
       end
     end,
     generateGames = function(self)
@@ -545,8 +556,24 @@ do
         end
       end
       for appID, args in pairs(games) do
-        table.insert(self.games, Game(args))
+        table.insert(self.games, args)
       end
+    end,
+    getStorePageURL = function(self, game)
+      assert(game ~= nil and game:getPlatformID() == self.platformID, 'main.platforms.steam.init.getStorePageURL')
+      if game:getPlatformOverride() == nil then
+        local appID = game:getBanner():reverse():match('^[^%.]+%.([^\\]+)'):reverse()
+        return ('https://store.steampowered.com/app/%s'):format(appID)
+      end
+      return nil
+    end,
+    getBannerURL = function(self, game)
+      assert(game ~= nil and game:getPlatformID() == self.platformID, 'main.platforms.steam.init.getBannerURL')
+      if game:getPlatformOverride() == nil then
+        local appID = game:getBanner():reverse():match('^[^%.]+%.([^\\]+)'):reverse()
+        return self:generateBannerURL(appID)
+      end
+      return nil
     end
   }
   _base_0.__index = _base_0
@@ -557,7 +584,7 @@ do
       self.name = "Steam"
       self.platform = 'steam'
       self.platformID = ENUMS.PLATFORM_IDS.STEAM
-      self.platformProcess = 'Steam.exe'
+      self.platformProcess = 'steam.exe'
       self.cachePath = 'cache\\steam\\'
       self.enabled = settings:getSteamEnabled()
       self.steamPath = settings:getSteamPath()

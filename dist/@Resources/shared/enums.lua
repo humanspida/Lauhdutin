@@ -4,7 +4,8 @@ ENUMS = {
     STEAM = 2,
     BATTLENET = 3,
     GOG_GALAXY = 4,
-    MAX = 5
+    CUSTOM = 5,
+    MAX = 6
   },
   FILTER_TYPES = {
     NONE = 1,
@@ -48,5 +49,26 @@ ENUMS = {
     SLIDE_DOWN = 4,
     SLIDE_LEFT = 5,
     MAX = 6
+  },
+  GAME_DETECTION_FREQUENCY = {
+    NEVER = 1,
+    ALWAYS = 2,
+    ONCE_PER_DAY = 3,
+    MAX = 4
+  },
+  OVERLAY_SLOT_TEXT = {
+    NONE = 1,
+    GAME_TITLE = 2,
+    GAME_PLATFORM = 3,
+    TIME_PLAYED_HOURS = 4,
+    TIME_PLAYED_HOURS_AND_MINUTES = 5,
+    TIME_PLAYED_HOURS_OR_MINUTES = 6,
+    LAST_PLAYED_YYYYMMDD = 7,
+    NOTES = 8,
+    MAX = 9
+  },
+  TAG_SOURCES = {
+    SKIN = 1,
+    PLATFORM = 2
   }
 }

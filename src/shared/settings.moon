@@ -137,22 +137,47 @@ migrators = {
 			settings.steam_personaname = nil
 			settings.show_platform = nil
 	}
+	{
+		version: 2
+		func: (settings) ->
+			settings.gameDetectionFrequency = ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY
+			settings.slots.overlayUpperText = ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE
+			settings.slots.overlayLowerText = ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES
+			settings.slots.overlayImagesEnabled = true
+			settings.showSession = false
+			settings.search = {}
+			settings.search.uninstalledGamesEnabled = false
+			settings.search.hiddenGamesEnabled = false
+			settings.platforms.custom = {}
+			settings.platforms.custom.bangs = {
+				starting: {}
+				stopping: {}
+			}
+			settings.platforms.gogGalaxy.useCommunityProfile = false
+			settings.platforms.gogGalaxy.profileName = nil
+	}
 }
 
 class Settings
 	new: () =>
-		@version = 1
+		@version = 2
 		@path = 'settings.json'
 		@defaultSettings = {
 			numberOfBackups: 5
 			logging: false -- If true, then extra information is printed to Rainmeter's log. Useful when troubleshooting issues.
 			sorting: ENUMS.SORTING_TYPES.ALPHABETICALLY -- How games are sorted.
+			gameDetectionFrequency: ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY -- How often the skin attempts to detect games when the skin is loaded.
+			showSession: false -- Load a tiny skin that shows the current system time and the current session's duration. Both times are shown in HH:MM format.
 			bangs: {
 				enabled: true -- Whether or not bangs are executed (applies to global, platform-specific, and game-specific bangs).
 				global: {
 					starting: {} -- Bangs that are executed by ALL games when a game is launched.
 					stopping: {} -- Bangs that are executed by ALL games when a game terminates.
 				}
+			}
+			search: {
+				uninstalledGamesEnabled: false
+				hiddenGamesEnabled: false
 			}
 			layout: {
 				rows: 1 -- The number of rows of slots.
@@ -172,6 +197,9 @@ class Settings
 			slots: {
 				doubleClickToLaunch: false
 				overlayEnabled: true
+				overlayUpperText: ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE
+				overlayLowerText: ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES
+				overlayImagesEnabled: true
 				hoverAnimation: ENUMS.SLOT_HOVER_ANIMATIONS.ZOOM_IN
 				clickAnimation: ENUMS.SLOT_CLICK_ANIMATIONS.SHRINK
 			}
@@ -212,6 +240,8 @@ class Settings
 					clientPath: '' -- The absolute path to the folder containing the GOG Galaxy executable. Needed only if games are launched via the GOG Galaxy client rather than directly via a game's executable.
 					programDataPath: 'C:\\ProgramData\\GOG.com\\Galaxy' -- The absolute path to the ProgramData folder (usually "C:\ProgramData\GOG.com\Galaxy"), which contains some of the local files that are used to figure out which games are installed.
 					indirectLaunch: false -- If true, then games are launched via the GOG Galaxy client, which enables the use of the GOG Galaxy overlay and tracking time played in the GOG Galaxy client. If false, then games are launched directly via their executables.
+					useCommunityProfile: false -- If true, then PhantomJS is used to download and parse the GOG profile's games page provided that the profile is public.
+					profileName: nil -- The name of the GOG profile.
 				}
 			}
 		}
@@ -272,7 +302,7 @@ class Settings
 	getNumberOfBackups: () => return @settings.numberOfBackups or 5
 
 	setNumberOfBackups: (value) =>
-		return if value < 0
+		return if value < 1
 		@settings.numberOfBackups = value
 
 	getLogging: () =>
@@ -285,8 +315,18 @@ class Settings
 	getSorting: () => return @settings.sorting or ENUMS.SORTING_TYPES.ALPHABETICALLY
 
 	setSorting: (value) =>
-		return if value < 1
+		return if value < ENUMS.SORTING_TYPES.ALPHABETICALLY or value >= ENUMS.SORTING_TYPES.MAX
 		@settings.sorting = value
+
+	getGameDetectionFrequency: () => return @settings.gameDetectionFrequency or ENUMS.GAME_DETECTION_FREQUENCY.ONCE_PER_DAY
+
+	setGameDetectionFrequency: (value) =>
+		return if value < ENUMS.GAME_DETECTION_FREQUENCY.NEVER or value >= ENUMS.GAME_DETECTION_FREQUENCY.MAX
+		@settings.gameDetectionFrequency = value
+
+	getShowSession: () => return @settings.showSession
+
+	toggleShowSession: () => @settings.showSession = not @settings.showSession
 
 	getLocalization: () => return @settings.localization or 'English'
 
@@ -317,6 +357,15 @@ class Settings
 			bang = bang\trim()
 			table.insert(bangs, bang) if bang ~= ''
 		@settings.bangs.global.stopping = bangs
+
+	-- Search
+	getSearchUninstalledGamesEnabled: () => return @settings.search.uninstalledGamesEnabled or false
+
+	toggleSearchUninstalledGamesEnabled: () => @settings.search.uninstalledGamesEnabled = not @settings.search.uninstalledGamesEnabled
+
+	getSearchHiddenGamesEnabled: () => return @settings.search.hiddenGamesEnabled or false
+
+	toggleSearchHiddenGamesEnabled: () => @settings.search.hiddenGamesEnabled = not @settings.search.hiddenGamesEnabled
 
 	-- Layout
 	getLayoutRows: () => return @settings.layout.rows or 1
@@ -404,6 +453,25 @@ class Settings
 		return true
 
 	toggleSlotsOverlayEnabled: () => @settings.slots.overlayEnabled = not @settings.slots.overlayEnabled
+
+	getSlotsOverlayUpperText: () => return @settings.slots.overlayUpperText or ENUMS.OVERLAY_SLOT_TEXT.GAME_TITLE
+
+	setSlotsOverlayUpperText: (value) =>
+		return if value < ENUMS.OVERLAY_SLOT_TEXT.NONE or value >= ENUMS.OVERLAY_SLOT_TEXT.MAX
+		@settings.slots.overlayUpperText = value
+
+	getSlotsOverlayLowerText: () => return @settings.slots.overlayLowerText or ENUMS.OVERLAY_SLOT_TEXT.TIME_PLAYED_HOURS_OR_MINUTES
+
+	setSlotsOverlayLowerText: (value) =>
+		return if value < ENUMS.OVERLAY_SLOT_TEXT.NONE or value >= ENUMS.OVERLAY_SLOT_TEXT.MAX
+		@settings.slots.overlayLowerText = value
+
+	getSlotsOverlayImagesEnabled: () =>
+		if @settings.slots.overlayImagesEnabled ~= nil
+			return @settings.slots.overlayImagesEnabled
+		return false
+
+	toggleSlotsOverlayImagesEnabled: () => @settings.slots.overlayImagesEnabled = not @settings.slots.overlayImagesEnabled
 
 	getSlotsHoverAnimation: () => return @settings.slots.hoverAnimation or ENUMS.SLOT_HOVER_ANIMATIONS.ZOOM_IN
 	
@@ -558,6 +626,21 @@ class Settings
 
 	toggleGOGGalaxyIndirectLaunch: () => @settings.platforms.gogGalaxy.indirectLaunch = not @settings.platforms.gogGalaxy.indirectLaunch
 
+	getGOGGalaxyParseCommunityProfile: () => return @settings.platforms.gogGalaxy.useCommunityProfile or false
+
+	toggleGOGGalaxyParseCommunityProfile: () => @settings.platforms.gogGalaxy.useCommunityProfile = not @settings.platforms.gogGalaxy.useCommunityProfile
+
+	getGOGGalaxyProfileName: () => return @settings.platforms.gogGalaxy.profileName or nil
+
+	setGOGGalaxyProfileName: (value) =>
+		return false if value == nil
+		value = value\trim()
+		if value == ''
+			@settings.platforms.gogGalaxy.profileName = nil
+		else
+			@settings.platforms.gogGalaxy.profileName = value
+		return true
+
 	getGOGGalaxyStartingBangs: () => return @settings.platforms.gogGalaxy.bangs.starting or {}
 
 	setGOGGalaxyStartingBangs: (tbl) =>
@@ -575,5 +658,24 @@ class Settings
 			bang = bang\trim()
 			table.insert(bangs, bang) if bang ~= ''
 		@settings.platforms.gogGalaxy.bangs.stopping = bangs
+
+	-- Custom games
+	getCustomStartingBangs: () => return @settings.platforms.custom.bangs.starting or {}
+
+	setCustomStartingBangs: (tbl) =>
+		bangs = {}
+		for bang in *tbl
+			bang = bang\trim()
+			table.insert(bangs, bang) if bang ~= ''
+		@settings.platforms.custom.bangs.starting = bangs
+
+	getCustomStoppingBangs: () => return @settings.platforms.custom.bangs.stopping or {}
+
+	setCustomStoppingBangs: (tbl) =>
+		bangs = {}
+		for bang in *tbl
+			bang = bang\trim()
+			table.insert(bangs, bang) if bang ~= ''
+		@settings.platforms.custom.bangs.stopping = bangs
 
 return Settings

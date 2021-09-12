@@ -1,5 +1,4 @@
 local Platform = require('main.platforms.platform')
-local Game = require('main.game')
 local Battlenet
 do
   local _class_0
@@ -20,6 +19,15 @@ do
     identifyFolders = function(self)
       SKIN:Bang(('["#@#windowless.vbs" "#@#main\\platforms\\battlenet\\identifyFolders.bat" "%s"]'):format(self.battlenetPaths[1]))
       return self:getWaitCommand(), '', 'OnIdentifiedBattlenetFolders'
+    end,
+    getBanner = function(self, title, bannerURL)
+      local banner = self:getBannerPath(title)
+      if not (banner) then
+        if bannerURL then
+          banner = io.joinPaths(self.cachePath, title .. bannerURL:reverse():match('^([^%.]+%.)'):reverse())
+        end
+      end
+      return banner
     end,
     generateGames = function(self, output)
       assert(type(output) == 'string')
@@ -125,7 +133,7 @@ do
             break
           end
           args.path = ('"%s" --exec="launch %s"'):format(self.clientPath, args.path)
-          args.banner = self:getBannerPath(args.title)
+          args.banner = self:getBanner(args.title, args.bannerURL)
           if not (args.banner) then
             args.expectedBanner = args.title
           end
@@ -139,7 +147,7 @@ do
       end
       for _index_0 = 1, #games do
         local args = games[_index_0]
-        table.insert(self.games, Game(args))
+        table.insert(self.games, args)
       end
     end
   }
